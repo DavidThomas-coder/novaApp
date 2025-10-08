@@ -66,7 +66,7 @@ An analytics dashboard that connects to the Eventbrite API to provide insights o
    python app.py
    ```
 
-   The API will be available at `http://localhost:5000`
+   The API will be available at `http://localhost:5001`
 
 ### Frontend Setup
 

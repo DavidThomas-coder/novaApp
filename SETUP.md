@@ -17,10 +17,10 @@ Get your Eventbrite API token from: https://www.eventbrite.com/platform/api
 Create a file `frontend/.env` with the following content:
 
 ```
-REACT_APP_API_URL=http://localhost:5000
+REACT_APP_API_URL=http://localhost:5001
 ```
 
-This is optional as the frontend defaults to `http://localhost:5000` if not set.
+This is optional as the frontend defaults to `http://localhost:5001` if not set.
 
 ## Quick Start
 

@@ -254,5 +254,5 @@ def get_insights():
 if __name__ == '__main__':
     if not EVENTBRITE_TOKEN:
         print("Warning: EVENTBRITE_TOKEN environment variable not set!")
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8080, use_reloader=False)
 

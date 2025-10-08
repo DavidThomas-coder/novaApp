@@ -5,7 +5,7 @@ import Dashboard from './components/Dashboard';
 import EventList from './components/EventList';
 import EventDetails from './components/EventDetails';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 function App() {
   const [insights, setInsights] = useState(null);
