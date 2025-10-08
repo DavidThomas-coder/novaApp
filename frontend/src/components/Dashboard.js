@@ -18,6 +18,16 @@ import './Dashboard.css';
 
 const COLORS = ['#ff1493', '#39ff14', '#ff00ff', '#00ffff', '#ffff00', '#ff6600'];
 
+// Helper function to format YYYY-MM to "Jan '25"
+const formatMonthLabel = (monthKey) => {
+  if (!monthKey) return '';
+  const [year, month] = monthKey.split('-');
+  const date = new Date(year, parseInt(month) - 1);
+  const monthName = date.toLocaleString('en-US', { month: 'short' });
+  const shortYear = year.slice(-2);
+  return `${monthName} '${shortYear}`;
+};
+
 function Dashboard({ insights }) {
   const {
     total_events,
@@ -36,10 +46,15 @@ function Dashboard({ insights }) {
 
   // Filter monthly trends based on selected event
   const filteredMonthlyTrends = React.useMemo(() => {
-    if (selectedEvent === 'all') {
-      return monthly_trends;
-    }
-    return events_monthly_data[selectedEvent] || [];
+    const data = selectedEvent === 'all' 
+      ? monthly_trends 
+      : events_monthly_data[selectedEvent] || [];
+    
+    // Add formatted month labels
+    return data.map(item => ({
+      ...item,
+      monthLabel: formatMonthLabel(item.month)
+    }));
   }, [selectedEvent, monthly_trends, events_monthly_data]);
 
   return (
@@ -112,7 +127,7 @@ function Dashboard({ insights }) {
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={filteredMonthlyTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-              <XAxis dataKey="month" stroke="#39ff14" />
+              <XAxis dataKey="monthLabel" stroke="#39ff14" />
               <YAxis stroke="#39ff14" />
               <Tooltip 
                 contentStyle={{ 
@@ -146,7 +161,7 @@ function Dashboard({ insights }) {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={filteredMonthlyTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-              <XAxis dataKey="month" stroke="#39ff14" />
+              <XAxis dataKey="monthLabel" stroke="#39ff14" />
               <YAxis stroke="#39ff14" />
               <Tooltip 
                 contentStyle={{ 
