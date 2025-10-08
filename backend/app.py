@@ -74,18 +74,38 @@ def get_events():
             
             org_id = organizations[0]['id']
         
-        # Get all events for the organization
-        events_response = requests.get(
-            f"{EVENTBRITE_API_BASE}/organizations/{org_id}/events/",
-            headers=get_headers(),
-            params={'status': 'all', 'order_by': 'start_desc'}
-        )
+        # Get all events for the organization with pagination
+        all_events = []
+        continuation = None
         
-        if events_response.status_code != 200:
-            return jsonify({'error': 'Failed to fetch events'}), 500
+        while True:
+            params = {'status': 'all', 'order_by': 'start_desc'}
+            if continuation:
+                params['continuation'] = continuation
+            
+            events_response = requests.get(
+                f"{EVENTBRITE_API_BASE}/organizations/{org_id}/events/",
+                headers=get_headers(),
+                params=params
+            )
+            
+            if events_response.status_code != 200:
+                return jsonify({'error': 'Failed to fetch events'}), 500
+            
+            events_data = events_response.json()
+            page_events = events_data.get('events', [])
+            all_events.extend(page_events)
+            
+            # Check if there are more pages
+            pagination = events_data.get('pagination', {})
+            if not pagination.get('has_more_items', False):
+                break
+            
+            continuation = pagination.get('continuation')
+            if not continuation:
+                break
         
-        events_data = events_response.json()
-        events = events_data.get('events', [])
+        events = all_events
         
         # Format events
         formatted_events = []
@@ -164,17 +184,38 @@ def get_insights():
             
             org_id = organizations[0]['id']
         
-        # Get all events
-        events_response = requests.get(
-            f"{EVENTBRITE_API_BASE}/organizations/{org_id}/events/",
-            headers=get_headers(),
-            params={'status': 'all', 'order_by': 'start_desc'}
-        )
+        # Get all events with pagination
+        all_events = []
+        continuation = None
         
-        if events_response.status_code != 200:
-            return jsonify({'error': 'Failed to fetch events'}), 500
+        while True:
+            params = {'status': 'all', 'order_by': 'start_desc'}
+            if continuation:
+                params['continuation'] = continuation
+            
+            events_response = requests.get(
+                f"{EVENTBRITE_API_BASE}/organizations/{org_id}/events/",
+                headers=get_headers(),
+                params=params
+            )
+            
+            if events_response.status_code != 200:
+                return jsonify({'error': 'Failed to fetch events'}), 500
+            
+            events_data = events_response.json()
+            page_events = events_data.get('events', [])
+            all_events.extend(page_events)
+            
+            # Check if there are more pages
+            pagination = events_data.get('pagination', {})
+            if not pagination.get('has_more_items', False):
+                break
+            
+            continuation = pagination.get('continuation')
+            if not continuation:
+                break
         
-        events = events_response.json().get('events', [])
+        events = all_events
         
         # Aggregate insights
         total_events = len(events)
