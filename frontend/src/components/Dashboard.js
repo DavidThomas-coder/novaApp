@@ -16,7 +16,7 @@ import {
 } from 'recharts';
 import './Dashboard.css';
 
-const COLORS = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a'];
+const COLORS = ['#ff1493', '#39ff14', '#ff00ff', '#00ffff', '#ffff00', '#ff6600'];
 
 function Dashboard({ insights }) {
   const {
@@ -80,28 +80,29 @@ function Dashboard({ insights }) {
           <h3>Monthly Trends</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={monthly_trends}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-              <XAxis dataKey="month" stroke="#666" />
-              <YAxis stroke="#666" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+              <XAxis dataKey="month" stroke="#39ff14" />
+              <YAxis stroke="#39ff14" />
               <Tooltip 
                 contentStyle={{ 
-                  background: 'white', 
-                  border: '1px solid #ddd',
-                  borderRadius: '8px'
+                  background: '#0a0a0a', 
+                  border: '1px solid #ff1493',
+                  borderRadius: '8px',
+                  color: '#39ff14'
                 }} 
               />
               <Legend />
               <Line 
                 type="monotone" 
                 dataKey="events" 
-                stroke="#667eea" 
+                stroke="#ff1493" 
                 strokeWidth={3}
                 name="Events"
               />
               <Line 
                 type="monotone" 
                 dataKey="attendees" 
-                stroke="#764ba2" 
+                stroke="#39ff14" 
                 strokeWidth={3}
                 name="Attendees"
               />
@@ -113,17 +114,18 @@ function Dashboard({ insights }) {
           <h3>Attendees by Month</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={monthly_trends}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-              <XAxis dataKey="month" stroke="#666" />
-              <YAxis stroke="#666" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+              <XAxis dataKey="month" stroke="#39ff14" />
+              <YAxis stroke="#39ff14" />
               <Tooltip 
                 contentStyle={{ 
-                  background: 'white', 
-                  border: '1px solid #ddd',
-                  borderRadius: '8px'
+                  background: '#0a0a0a', 
+                  border: '1px solid #ff1493',
+                  borderRadius: '8px',
+                  color: '#39ff14'
                 }} 
               />
-              <Bar dataKey="attendees" fill="#667eea" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="attendees" fill="#ff1493" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -150,9 +152,10 @@ function Dashboard({ insights }) {
                 </Pie>
                 <Tooltip 
                   contentStyle={{ 
-                    background: 'white', 
-                    border: '1px solid #ddd',
-                    borderRadius: '8px'
+                    background: '#0a0a0a', 
+                    border: '1px solid #ff1493',
+                    borderRadius: '8px',
+                    color: '#39ff14'
                   }} 
                 />
               </PieChart>

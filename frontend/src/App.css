@@ -4,11 +4,12 @@
 }
 
 .app-header {
-  background: white;
+  background: #0a0a0a;
   border-radius: 16px;
   padding: 30px;
   margin-bottom: 30px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 40px rgba(255, 20, 147, 0.3);
+  border: 1px solid rgba(255, 20, 147, 0.2);
 }
 
 .header-content {
@@ -20,14 +21,15 @@
 .app-header h1 {
   font-size: 2.5rem;
   margin-bottom: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff1493 0%, #39ff14 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: 700;
 }
 
 .subtitle {
-  color: #666;
+  color: #888;
   font-size: 1.1rem;
   margin-bottom: 15px;
 }
@@ -42,17 +44,17 @@
 
 .org-selector label {
   font-weight: 600;
-  color: #666;
+  color: #39ff14;
   font-size: 0.95rem;
 }
 
 .org-dropdown {
   padding: 10px 20px;
-  border: 2px solid #eee;
+  border: 2px solid #ff1493;
   border-radius: 8px;
   font-size: 1rem;
-  background: white;
-  color: #333;
+  background: #1a1a1a;
+  color: #39ff14;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 250px;
@@ -60,28 +62,29 @@
 }
 
 .org-dropdown:hover {
-  border-color: #667eea;
+  border-color: #39ff14;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 
 .org-dropdown:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #ff1493;
+  box-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
 }
 
 .nav-tabs {
   display: flex;
   justify-content: center;
   gap: 10px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #333;
   padding-top: 20px;
 }
 
 .nav-tabs button {
   padding: 12px 30px;
-  border: none;
-  background: #f5f5f5;
-  color: #666;
+  border: 2px solid #333;
+  background: #1a1a1a;
+  color: #888;
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
@@ -90,13 +93,17 @@
 }
 
 .nav-tabs button:hover {
-  background: #e8e8e8;
+  background: #252525;
+  border-color: #ff1493;
+  color: #ff1493;
 }
 
 .nav-tabs button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #ff1493 0%, #39ff14 100%);
+  color: #000;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(255, 20, 147, 0.6);
+  font-weight: 700;
 }
 
 .app-main {
@@ -110,17 +117,18 @@
   align-items: center;
   justify-content: center;
   min-height: 60vh;
-  color: white;
+  color: #39ff14;
 }
 
 .spinner {
   width: 50px;
   height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border: 4px solid rgba(57, 255, 20, 0.3);
+  border-top-color: #ff1493;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
 }
 
 @keyframes spin {
@@ -132,47 +140,49 @@
 }
 
 .error {
-  background: white;
+  background: #0a0a0a;
   border-radius: 16px;
   padding: 40px;
   max-width: 600px;
   margin: 0 auto;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 40px rgba(255, 20, 147, 0.3);
+  border: 1px solid rgba(255, 20, 147, 0.3);
 }
 
 .error h2 {
-  color: #e74c3c;
+  color: #ff1493;
   margin-bottom: 15px;
   font-size: 2rem;
 }
 
 .error p {
-  color: #666;
+  color: #888;
   margin-bottom: 10px;
   font-size: 1.1rem;
 }
 
 .error .hint {
   font-size: 0.9rem;
-  color: #999;
+  color: #666;
   margin-top: 20px;
 }
 
 .retry-button {
   margin-top: 20px;
   padding: 12px 30px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #ff1493 0%, #39ff14 100%);
+  color: #000;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .retry-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(255, 20, 147, 0.6);
 }
 

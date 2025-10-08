@@ -37,14 +37,15 @@ def get_organizations():
         
         organizations = org_response.json().get('organizations', [])
         
-        # Format organizations
+        # Filter to only The Nova Comedy Collective
         formatted_orgs = []
         for org in organizations:
-            formatted_orgs.append({
-                'id': org['id'],
-                'name': org['name'],
-                'image_id': org.get('image_id', None)
-            })
+            if 'Nova Comedy Collective' in org['name']:
+                formatted_orgs.append({
+                    'id': org['id'],
+                    'name': org['name'],
+                    'image_id': org.get('image_id', None)
+                })
         
         return jsonify({'organizations': formatted_orgs})
     

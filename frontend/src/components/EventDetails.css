@@ -3,9 +3,9 @@
 }
 
 .back-button {
-  background: white;
-  color: #667eea;
-  border: 2px solid white;
+  background: #0a0a0a;
+  color: #39ff14;
+  border: 2px solid #39ff14;
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 1rem;
@@ -16,21 +16,24 @@
 }
 
 .back-button:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: #39ff14;
+  color: #000;
   transform: translateX(-5px);
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
 }
 
 .event-header-card {
-  background: white;
+  background: #0a0a0a;
   border-radius: 16px;
   padding: 30px;
   margin-bottom: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.2);
+  border: 1px solid rgba(255, 20, 147, 0.3);
 }
 
 .event-header-card h2 {
   font-size: 2rem;
-  color: #333;
+  color: #39ff14;
   margin-bottom: 20px;
 }
 
@@ -44,7 +47,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #666;
+  color: #888;
   font-size: 1rem;
 }
 
@@ -53,16 +56,17 @@
 }
 
 .ticket-types-card {
-  background: white;
+  background: #0a0a0a;
   border-radius: 16px;
   padding: 30px;
   margin-bottom: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.2);
+  border: 1px solid rgba(255, 20, 147, 0.3);
 }
 
 .ticket-types-card h3 {
   font-size: 1.5rem;
-  color: #333;
+  color: #39ff14;
   margin-bottom: 20px;
 }
 
@@ -77,30 +81,31 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  background: rgba(255, 20, 147, 0.1);
   border-radius: 10px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #ff1493;
 }
 
 .ticket-type-name {
   font-weight: 600;
-  color: #333;
+  color: #fff;
 }
 
 .ticket-type-count {
-  background: #667eea;
-  color: white;
+  background: linear-gradient(135deg, #ff1493 0%, #39ff14 100%);
+  color: #000;
   padding: 4px 12px;
   border-radius: 20px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
 }
 
 .attendees-card {
-  background: white;
+  background: #0a0a0a;
   border-radius: 16px;
   padding: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.2);
+  border: 1px solid rgba(255, 20, 147, 0.3);
 }
 
 .attendees-header {
@@ -114,22 +119,29 @@
 
 .attendees-header h3 {
   font-size: 1.5rem;
-  color: #333;
+  color: #39ff14;
   margin: 0;
 }
 
 .search-input {
   padding: 10px 20px;
-  border: 2px solid #eee;
+  border: 2px solid #ff1493;
   border-radius: 8px;
   font-size: 1rem;
   width: 300px;
+  background: #1a1a1a;
+  color: #39ff14;
   transition: border-color 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: #666;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #39ff14;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 
 .attendees-table-container {
@@ -142,14 +154,14 @@
 }
 
 .attendees-table thead {
-  background: #f8f9fa;
+  background: rgba(255, 20, 147, 0.1);
 }
 
 .attendees-table th {
   padding: 15px;
   text-align: left;
   font-weight: 600;
-  color: #666;
+  color: #39ff14;
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
@@ -157,8 +169,8 @@
 
 .attendees-table td {
   padding: 15px;
-  border-top: 1px solid #eee;
-  color: #333;
+  border-top: 1px solid #333;
+  color: #fff;
 }
 
 .attendees-table tbody tr {
@@ -166,7 +178,7 @@
 }
 
 .attendees-table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: rgba(57, 255, 20, 0.05);
 }
 
 .name-cell {
@@ -174,24 +186,24 @@
 }
 
 .email-cell {
-  color: #667eea;
+  color: #ff1493;
 }
 
 .status-pill {
   display: inline-block;
   padding: 6px 12px;
-  background: #43e97b;
-  color: white;
+  background: #39ff14;
+  color: #000;
   border-radius: 20px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
 .no-results {
   text-align: center;
   padding: 40px;
-  color: #999;
+  color: #888;
   font-size: 1.1rem;
 }
 
