@@ -184,9 +184,13 @@ def get_insights():
         ticket_types = defaultdict(int)
         unique_emails = set()
         repeat_customers = defaultdict(int)
+        events_list = []  # List of events with monthly data for filtering
+        events_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> event count
+        attendees_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> attendee count
         
         for event in events:
             event_id = event['id']
+            event_name = event['name']['text']
             
             # Get attendees for each event
             attendees_response = requests.get(
@@ -207,6 +211,12 @@ def get_insights():
                 
                 events_by_month[month_key] += 1
                 attendees_by_month[month_key] += event_attendee_count
+                
+                # Track per-event data for filtering
+                events_by_month_by_event[event_name][month_key] += 1
+                attendees_by_month_by_event[event_name][month_key] += event_attendee_count
+                if event_name not in [e['name'] for e in events_list]:
+                    events_list.append({'id': event_id, 'name': event_name})
                 
                 # Process attendees
                 for attendee in attendees:
@@ -236,6 +246,19 @@ def get_insights():
         # Format ticket type data
         ticket_data = [{'type': k, 'count': v} for k, v in ticket_types.items()]
         
+        # Format event-specific monthly data for filtering
+        events_monthly_data = {}
+        for event_name in events_by_month_by_event.keys():
+            event_monthly = []
+            all_months = set(events_by_month_by_event[event_name].keys()) | set(attendees_by_month_by_event[event_name].keys())
+            for month in sorted(all_months):
+                event_monthly.append({
+                    'month': month,
+                    'events': events_by_month_by_event[event_name][month],
+                    'attendees': attendees_by_month_by_event[event_name][month]
+                })
+            events_monthly_data[event_name] = event_monthly
+        
         insights = {
             'total_events': total_events,
             'total_attendees': total_attendees,
@@ -244,7 +267,9 @@ def get_insights():
             'repeat_customer_rate': round(repeat_customer_rate, 2),
             'avg_attendees_per_event': round(total_attendees / total_events, 2) if total_events > 0 else 0,
             'monthly_trends': monthly_data,
-            'ticket_types': ticket_data
+            'ticket_types': ticket_data,
+            'events_list': events_list,
+            'events_monthly_data': events_monthly_data
         }
         
         return jsonify(insights)

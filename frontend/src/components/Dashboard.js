@@ -27,8 +27,20 @@ function Dashboard({ insights }) {
     repeat_customer_rate,
     avg_attendees_per_event,
     monthly_trends,
-    ticket_types
+    ticket_types,
+    events_list = [],
+    events_monthly_data = {}
   } = insights;
+
+  const [selectedEvent, setSelectedEvent] = React.useState('all');
+
+  // Filter monthly trends based on selected event
+  const filteredMonthlyTrends = React.useMemo(() => {
+    if (selectedEvent === 'all') {
+      return monthly_trends;
+    }
+    return events_monthly_data[selectedEvent] || [];
+  }, [selectedEvent, monthly_trends, events_monthly_data]);
 
   return (
     <div className="dashboard">
@@ -75,11 +87,30 @@ function Dashboard({ insights }) {
         </div>
       </div>
 
+      {events_list.length > 0 && (
+        <div className="event-filter">
+          <label htmlFor="event-filter-select">Filter by Show:</label>
+          <select 
+            id="event-filter-select"
+            value={selectedEvent}
+            onChange={(e) => setSelectedEvent(e.target.value)}
+            className="event-filter-dropdown"
+          >
+            <option value="all">All Events Combined</option>
+            {events_list.map(event => (
+              <option key={event.id} value={event.name}>
+                {event.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       <div className="charts-grid">
         <div className="chart-card">
           <h3>Monthly Trends</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={monthly_trends}>
+            <LineChart data={filteredMonthlyTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
               <XAxis dataKey="month" stroke="#39ff14" />
               <YAxis stroke="#39ff14" />
@@ -113,7 +144,7 @@ function Dashboard({ insights }) {
         <div className="chart-card">
           <h3>Attendees by Month</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={monthly_trends}>
+            <BarChart data={filteredMonthlyTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
               <XAxis dataKey="month" stroke="#39ff14" />
               <YAxis stroke="#39ff14" />
