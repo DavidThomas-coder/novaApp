@@ -1,0 +1,200 @@
+.predictions {
+  animation: fadeIn 0.5s ease;
+}
+
+.prediction-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.prediction-card {
+  background: #0a0a0a;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.2);
+  border: 1px solid rgba(255, 20, 147, 0.3);
+  text-align: center;
+}
+
+.prediction-card h3 {
+  color: #39ff14;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.trend-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.trend-emoji {
+  font-size: 3rem;
+}
+
+.trend-label {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  background: linear-gradient(135deg, #ff1493 0%, #39ff14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.trend-detail {
+  color: #888;
+  font-size: 0.95rem;
+}
+
+.forecast-chart-card {
+  background: #0a0a0a;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.2);
+  border: 1px solid rgba(255, 20, 147, 0.3);
+}
+
+.forecast-chart-card h3 {
+  color: #39ff14;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.chart-note {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 30px;
+}
+
+.insight-card {
+  background: #0a0a0a;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.2);
+  border: 1px solid rgba(255, 20, 147, 0.3);
+}
+
+.insight-card h3 {
+  color: #39ff14;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+.best-days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.day-item {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  align-items: center;
+  gap: 15px;
+  padding: 12px;
+  background: rgba(255, 20, 147, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #ff1493;
+}
+
+.day-rank {
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.day-name {
+  font-weight: 600;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.day-avg {
+  color: #39ff14;
+  font-weight: 600;
+}
+
+.day-count {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.seasonal-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.season-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.season-label {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.season-value-bar {
+  width: 100%;
+  height: 30px;
+  background: rgba(255, 20, 147, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.season-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff1493 0%, #39ff14 100%);
+  transition: width 0.5s ease;
+}
+
+.season-stats {
+  display: flex;
+  justify-content: space-between;
+  color: #888;
+  font-size: 0.95rem;
+}
+
+.revenue-stat {
+  color: #39ff14;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .prediction-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .day-item {
+    grid-template-columns: 30px 1fr;
+    gap: 10px;
+  }
+  
+  .day-avg,
+  .day-count {
+    grid-column: 2;
+  }
+}
+
