@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import EventList from './components/EventList';
 import EventDetails from './components/EventDetails';
 import CustomerInsights from './components/CustomerInsights';
+import EventPerformance from './components/EventPerformance';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
@@ -149,6 +150,12 @@ function App() {
             Customers
           </button>
           <button 
+            className={activeView === 'performance' ? 'active' : ''}
+            onClick={() => setActiveView('performance')}
+          >
+            Performance
+          </button>
+          <button 
             className={activeView === 'events' ? 'active' : ''}
             onClick={() => setActiveView('events')}
           >
@@ -164,6 +171,10 @@ function App() {
         
         {activeView === 'customers' && insights && (
           <CustomerInsights insights={insights} />
+        )}
+        
+        {activeView === 'performance' && (
+          <EventPerformance orgId={selectedOrgId} />
         )}
         
         {activeView === 'events' && (
