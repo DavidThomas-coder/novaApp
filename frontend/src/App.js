@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { cache } from './utils/cache';
 import './App.css';
 import Dashboard from './components/Dashboard';
 import EventList from './components/EventList';
@@ -53,17 +54,49 @@ function App() {
     setLoading(true);
     setError(null);
     try {
+      // Try to get cached data first
+      const cachedInsights = cache.get(`nova_insights_${selectedOrgId}`);
+      const cachedEvents = cache.get(`nova_events_${selectedOrgId}`);
+      
+      if (cachedInsights && cachedEvents) {
+        setInsights(cachedInsights);
+        setEvents(cachedEvents);
+        setLoading(false);
+        
+        // Refresh in background
+        loadDataFromAPI();
+        return;
+      }
+      
+      // Load from API if no cache
+      await loadDataFromAPI();
+    } catch (err) {
+      setError(err.response?.data?.error || err.message);
+      setLoading(false);
+    }
+  };
+  
+  const loadDataFromAPI = async () => {
+    try {
       // Load insights and events in parallel with org_id parameter
       const [insightsRes, eventsRes] = await Promise.all([
         axios.get(`${API_BASE_URL}/api/insights`, { params: { org_id: selectedOrgId } }),
         axios.get(`${API_BASE_URL}/api/events`, { params: { org_id: selectedOrgId } })
       ]);
       
-      setInsights(insightsRes.data);
-      setEvents(eventsRes.data.events);
+      const insightsData = insightsRes.data;
+      const eventsData = eventsRes.data.events;
+      
+      setInsights(insightsData);
+      setEvents(eventsData);
+      
+      // Cache the data
+      cache.set(`nova_insights_${selectedOrgId}`, insightsData);
+      cache.set(`nova_events_${selectedOrgId}`, eventsData);
+      
+      setLoading(false);
     } catch (err) {
       setError(err.response?.data?.error || err.message);
-    } finally {
       setLoading(false);
     }
   };
