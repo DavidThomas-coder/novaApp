@@ -108,7 +108,7 @@ function EventPerformance({ orgId }) {
           onChange={(e) => setSortBy(e.target.value)}
           className="sort-dropdown"
         >
-          <option value="revenue">By Revenue</option>
+          <option value="revenue">By Gross Revenue</option>
           <option value="attendees">By Attendance</option>
           <option value="sell-through">By Sell-Through Rate</option>
           <option value="check-in">By Check-In Rate</option>
@@ -138,7 +138,7 @@ function EventPerformance({ orgId }) {
               <th>Sell-Through</th>
               <th>Checked In</th>
               <th>Check-In Rate</th>
-              <th>Revenue</th>
+              <th>Gross Revenue</th>
               <th>Avg Price</th>
             </tr>
           </thead>

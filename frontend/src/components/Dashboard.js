@@ -99,8 +99,8 @@ function Dashboard({ insights }) {
   return (
     <div className="dashboard">
       <p className="tab-description">
-        Overview of key metrics and trends across all events. Track revenue, attendance, 
-        and customer retention at a glance.
+        Overview of key metrics and trends across all events. Track gross revenue (before expenses like room rental), 
+        attendance, and customer retention at a glance.
       </p>
       
       <DateRangeFilter onDateRangeChange={handleDateRangeChange} />
@@ -150,15 +150,16 @@ function Dashboard({ insights }) {
         <div className="stat-card">
           <div className="stat-icon">💰</div>
           <div className="stat-content">
-            <h3>Total Revenue</h3>
+            <h3>Total Gross Revenue</h3>
             <p className="stat-value">${total_revenue.toLocaleString()}</p>
+            <p className="stat-detail">Before expenses</p>
           </div>
         </div>
         
         <div className="stat-card">
           <div className="stat-icon">💵</div>
           <div className="stat-content">
-            <h3>Avg Revenue/Event</h3>
+            <h3>Avg Gross Revenue/Event</h3>
             <p className="stat-value">${avg_revenue_per_event.toLocaleString()}</p>
           </div>
         </div>
@@ -166,8 +167,9 @@ function Dashboard({ insights }) {
         <div className="stat-card">
           <div className="stat-icon">🎫</div>
           <div className="stat-content">
-            <h3>Avg Revenue/Ticket</h3>
+            <h3>Avg Ticket Price</h3>
             <p className="stat-value">${avg_revenue_per_ticket.toFixed(2)}</p>
+            <p className="stat-detail">Gross per ticket</p>
           </div>
         </div>
       </div>
@@ -255,7 +257,7 @@ function Dashboard({ insights }) {
         </div>
 
         <div className="chart-card">
-          <h3>Revenue by Month</h3>
+          <h3>Gross Revenue by Month</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={filteredMonthlyTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
