@@ -220,9 +220,12 @@ def get_insights():
         # Aggregate insights
         total_events = len(events)
         total_attendees = 0
+        total_revenue = 0
         events_by_month = defaultdict(int)
         attendees_by_month = defaultdict(int)
+        revenue_by_month = defaultdict(float)
         ticket_types = defaultdict(int)
+        ticket_revenue = defaultdict(float)
         unique_emails = set()
         repeat_customers = defaultdict(int)
         events_list = []  # List of events with monthly data for filtering
@@ -270,6 +273,16 @@ def get_insights():
                     
                     ticket_class = attendee.get('ticket_class_name', 'Unknown')
                     ticket_types[ticket_class] += 1
+                    
+                    # Track revenue
+                    costs = attendee.get('costs', {})
+                    gross = costs.get('gross', {})
+                    revenue_cents = gross.get('value', 0)
+                    revenue_dollars = revenue_cents / 100.0
+                    
+                    total_revenue += revenue_dollars
+                    revenue_by_month[month_key] += revenue_dollars
+                    ticket_revenue[ticket_class] += revenue_dollars
         
         # Calculate repeat customer percentage
         repeat_customer_count = sum(1 for count in repeat_customers.values() if count > 1)
@@ -281,11 +294,18 @@ def get_insights():
             monthly_data.append({
                 'month': month,
                 'events': events_by_month[month],
-                'attendees': attendees_by_month[month]
+                'attendees': attendees_by_month[month],
+                'revenue': round(revenue_by_month[month], 2)
             })
         
-        # Format ticket type data
-        ticket_data = [{'type': k, 'count': v} for k, v in ticket_types.items()]
+        # Format ticket type data with revenue
+        ticket_data = []
+        for ticket_type, count in ticket_types.items():
+            ticket_data.append({
+                'type': ticket_type,
+                'count': count,
+                'revenue': round(ticket_revenue[ticket_type], 2)
+            })
         
         # Format event-specific monthly data for filtering
         events_monthly_data = {}
@@ -303,6 +323,9 @@ def get_insights():
         insights = {
             'total_events': total_events,
             'total_attendees': total_attendees,
+            'total_revenue': round(total_revenue, 2),
+            'avg_revenue_per_event': round(total_revenue / total_events, 2) if total_events > 0 else 0,
+            'avg_revenue_per_ticket': round(total_revenue / total_attendees, 2) if total_attendees > 0 else 0,
             'unique_customers': len(unique_emails),
             'repeat_customers': repeat_customer_count,
             'repeat_customer_rate': round(repeat_customer_rate, 2),

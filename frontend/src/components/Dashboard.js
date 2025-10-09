@@ -32,6 +32,9 @@ function Dashboard({ insights }) {
   const {
     total_events,
     total_attendees,
+    total_revenue = 0,
+    avg_revenue_per_event = 0,
+    avg_revenue_per_ticket = 0,
     unique_customers,
     repeat_customers,
     repeat_customer_rate,
@@ -120,6 +123,30 @@ function Dashboard({ insights }) {
             <p className="stat-value">{avg_attendees_per_event}</p>
           </div>
         </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">💰</div>
+          <div className="stat-content">
+            <h3>Total Revenue</h3>
+            <p className="stat-value">${total_revenue.toLocaleString()}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">💵</div>
+          <div className="stat-content">
+            <h3>Avg Revenue/Event</h3>
+            <p className="stat-value">${avg_revenue_per_event.toLocaleString()}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">🎫</div>
+          <div className="stat-content">
+            <h3>Avg Revenue/Ticket</h3>
+            <p className="stat-value">${avg_revenue_per_ticket.toFixed(2)}</p>
+          </div>
+        </div>
       </div>
 
       {events_list.length > 0 && (
@@ -192,6 +219,27 @@ function Dashboard({ insights }) {
                 }} 
               />
               <Bar dataKey="attendees" fill="#ff1493" radius={[8, 8, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="chart-card">
+          <h3>Revenue by Month</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={filteredMonthlyTrends}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+              <XAxis dataKey="monthLabel" stroke="#39ff14" />
+              <YAxis stroke="#39ff14" />
+              <Tooltip 
+                contentStyle={{ 
+                  background: '#0a0a0a', 
+                  border: '1px solid #ff1493',
+                  borderRadius: '8px',
+                  color: '#39ff14'
+                }}
+                formatter={(value) => `$${value.toLocaleString()}`}
+              />
+              <Bar dataKey="revenue" fill="#39ff14" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
