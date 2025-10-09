@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { exportAttendeesToCSV } from '../utils/csvExport';
 import './EventDetails.css';
 
 function EventDetails({ event, onBack }) {
@@ -68,13 +69,22 @@ function EventDetails({ event, onBack }) {
       <div className="attendees-card">
         <div className="attendees-header">
           <h3>Attendees ({filteredAttendees.length})</h3>
-          <input
-            type="text"
-            placeholder="Search attendees..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
+          <div className="attendees-controls">
+            <input
+              type="text"
+              placeholder="Search attendees..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <button 
+              onClick={() => exportAttendeesToCSV(event.attendees, event.name)}
+              className="export-button"
+              title="Export attendees to CSV"
+            >
+              📊 Export
+            </button>
+          </div>
         </div>
 
         <div className="attendees-table-container">

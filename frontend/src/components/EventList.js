@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { exportEventsToCSV } from '../utils/csvExport';
 import './EventList.css';
 
 function EventList({ events, onEventSelect }) {
@@ -69,6 +70,14 @@ function EventList({ events, onEventSelect }) {
           <option value="draft">Draft</option>
           <option value="canceled">Canceled</option>
         </select>
+        
+        <button 
+          onClick={() => exportEventsToCSV(filteredEvents)}
+          className="export-button"
+          title="Export filtered events to CSV"
+        >
+          📊 Export Events
+        </button>
       </div>
       
       <div className="events-grid">
