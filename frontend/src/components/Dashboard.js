@@ -14,6 +14,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
+import { exportMonthlyTrendsToCSV } from '../utils/csvExport';
 import './Dashboard.css';
 
 const COLORS = ['#ff1493', '#39ff14', '#ff00ff', '#00ffff', '#ffff00', '#ff6600'];
@@ -165,6 +166,14 @@ function Dashboard({ insights }) {
               </option>
             ))}
           </select>
+          
+          <button 
+            onClick={() => exportMonthlyTrendsToCSV(filteredMonthlyTrends)}
+            className="export-button"
+            title="Export monthly data to CSV"
+          >
+            📊 Export Data
+          </button>
         </div>
       )}
 

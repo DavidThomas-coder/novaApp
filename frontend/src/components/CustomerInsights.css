@@ -69,10 +69,37 @@
   border: 1px solid rgba(255, 20, 147, 0.3);
 }
 
+.customers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
 .top-customers-card h3 {
   color: #39ff14;
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin: 0;
+}
+
+.export-button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ff1493 0%, #39ff14 100%);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.export-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 20, 147, 0.6);
 }
 
 .top-customers-table-container {

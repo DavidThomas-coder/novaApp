@@ -1,4 +1,5 @@
 import React from 'react';
+import { exportCustomersToCSV } from '../utils/csvExport';
 import './CustomerInsights.css';
 
 function CustomerInsights({ insights }) {
@@ -45,7 +46,16 @@ function CustomerInsights({ insights }) {
 
       {top_customers.length > 0 && (
         <div className="top-customers-card">
-          <h3>Top 10 Most Engaged Customers</h3>
+          <div className="customers-header">
+            <h3>Top 10 Most Engaged Customers</h3>
+            <button 
+              onClick={() => exportCustomersToCSV(top_customers)}
+              className="export-button"
+              title="Export customer data to CSV"
+            >
+              📊 Export Customers
+            </button>
+          </div>
           <div className="top-customers-table-container">
             <table className="top-customers-table">
               <thead>
