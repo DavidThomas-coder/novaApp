@@ -133,12 +133,20 @@ function App() {
   }
 
   if (error) {
+    const isRateLimit = error.includes('429') || error.includes('rate limit');
     return (
       <div className="app">
         <div className="error">
-          <h2>⚠️ Error</h2>
+          <h2>⚠️ {isRateLimit ? 'API Rate Limit Reached' : 'Error'}</h2>
           <p>{error}</p>
-          <p className="hint">Make sure your EVENTBRITE_TOKEN is set correctly.</p>
+          {isRateLimit ? (
+            <p className="hint">
+              The Eventbrite API has a rate limit. Please wait 2-3 minutes and try again. 
+              Avoid clicking the Performance tab repeatedly as it makes many API calls.
+            </p>
+          ) : (
+            <p className="hint">Make sure your EVENTBRITE_TOKEN is set correctly.</p>
+          )}
           <button onClick={loadData} className="retry-button">Retry</button>
         </div>
       </div>

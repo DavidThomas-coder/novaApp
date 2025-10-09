@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 import os
+import time
 from datetime import datetime
 from collections import defaultdict
 
@@ -17,6 +18,27 @@ def get_headers():
         'Authorization': f'Bearer {EVENTBRITE_TOKEN}',
         'Content-Type': 'application/json'
     }
+
+def make_api_request(url, params=None, max_retries=3):
+    """Make API request with rate limit handling"""
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=get_headers(), params=params)
+            
+            if response.status_code == 429:
+                # Rate limited - wait and retry
+                wait_time = min(2 ** attempt, 10)  # Exponential backoff, max 10 seconds
+                print(f"Rate limited, waiting {wait_time}s before retry...")
+                time.sleep(wait_time)
+                continue
+            
+            return response
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(1)
+    
+    return None
 
 @app.route('/api/health', methods=['GET'])
 def health():
