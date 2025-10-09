@@ -218,7 +218,7 @@ function App() {
         )}
         
         {activeView === 'predictions' && insights && (
-          <Predictions insights={insights} events={events} />
+          <Predictions insights={insights} events={events} orgId={selectedOrgId} />
         )}
         
         {activeView === 'events' && (

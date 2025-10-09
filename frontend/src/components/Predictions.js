@@ -1,18 +1,47 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
+import axios from 'axios';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { predictNextMonths, analyzeBestDays, analyzeSeasonality } from '../utils/predictions';
 import './Predictions.css';
 
-function Predictions({ insights, events }) {
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
+function Predictions({ insights, events, orgId }) {
   const { monthly_trends = [] } = insights;
+  const [performanceData, setPerformanceData] = useState([]);
+  const [loadingPerf, setLoadingPerf] = useState(false);
+
+  // Load performance data in background for best days calculation
+  useEffect(() => {
+    const loadPerformanceData = async () => {
+      if (!orgId) return;
+      setLoadingPerf(true);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/event-performance`, {
+          params: { org_id: orgId },
+          timeout: 120000
+        });
+        setPerformanceData(response.data.events || []);
+      } catch (err) {
+        console.warn('Could not load performance data for predictions:', err);
+      } finally {
+        setLoadingPerf(false);
+      }
+    };
+    
+    loadPerformanceData();
+  }, [orgId]);
 
   const forecast = useMemo(() => {
     return predictNextMonths(monthly_trends, 3);
   }, [monthly_trends]);
 
   const bestDays = useMemo(() => {
-    return analyzeBestDays(events);
-  }, [events]);
+    if (performanceData.length === 0) {
+      return [{name: 'Loading...', avgAttendees: 0, count: 0}];
+    }
+    return analyzeBestDays(performanceData);
+  }, [performanceData]);
 
   const seasonality = useMemo(() => {
     return analyzeSeasonality(monthly_trends);
@@ -46,6 +75,10 @@ function Predictions({ insights, events }) {
   return (
     <div className="predictions">
       <h2 className="section-title">Predictive Analytics & Insights</h2>
+      <p className="tab-description">
+        Data-driven predictions and patterns to help you plan future events. See forecasted attendance, 
+        discover the best days to schedule shows, and understand seasonal trends.
+      </p>
       
       <div className="prediction-cards-grid">
         <div className="prediction-card">

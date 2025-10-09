@@ -98,6 +98,11 @@ function Dashboard({ insights }) {
 
   return (
     <div className="dashboard">
+      <p className="tab-description">
+        Overview of key metrics and trends across all events. Track revenue, attendance, 
+        and customer retention at a glance.
+      </p>
+      
       <DateRangeFilter onDateRangeChange={handleDateRangeChange} />
       
       <div className="stats-grid">

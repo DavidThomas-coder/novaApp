@@ -68,6 +68,10 @@ function EventList({ events, onEventSelect }) {
   return (
     <div className="event-list">
       <h2 className="section-title">All Events ({filteredEvents.length})</h2>
+      <p className="tab-description">
+        Browse and search all your Eventbrite events. Filter by status, sort by date or name, 
+        and click any event to view detailed attendee information.
+      </p>
       
       <div className="event-filters">
         <input

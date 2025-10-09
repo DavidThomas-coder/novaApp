@@ -14,6 +14,10 @@ function CustomerInsights({ insights }) {
   return (
     <div className="customer-insights">
       <h2 className="section-title">Customer Insights</h2>
+      <p className="tab-description">
+        Understand your audience with detailed customer analytics. Track new vs. returning customers, 
+        lifetime value, and identify your most engaged fans.
+      </p>
       
       <div className="customer-stats-grid">
         <div className="customer-stat-card">

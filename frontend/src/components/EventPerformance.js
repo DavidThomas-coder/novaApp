@@ -18,11 +18,13 @@ function EventPerformance({ orgId }) {
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/api/event-performance`, {
-        params: { org_id: orgId }
+        params: { org_id: orgId },
+        timeout: 120000 // 2 minute timeout for large datasets
       });
       setEvents(response.data.events);
     } catch (err) {
       console.error('Failed to load performance data:', err);
+      setEvents([]);
     } finally {
       setLoading(false);
     }
@@ -53,6 +55,10 @@ function EventPerformance({ orgId }) {
   return (
     <div className="event-performance">
       <h2 className="section-title">Event Performance Rankings</h2>
+      <p className="tab-description">
+        Compare all events by attendance, revenue, sell-through rates, and check-in rates. 
+        Identify your best-performing shows and track which events drive the most engagement.
+      </p>
       
       <div className="performance-controls">
         <select 
