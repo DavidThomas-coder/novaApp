@@ -57,6 +57,26 @@ function Dashboard({ insights }) {
     }));
   }, [selectedEvent, monthly_trends, events_monthly_data]);
 
+  // Group ticket types: top 5 + "Other"
+  const groupedTicketTypes = React.useMemo(() => {
+    if (!ticket_types || ticket_types.length === 0) return [];
+    
+    // Sort by count descending
+    const sorted = [...ticket_types].sort((a, b) => b.count - a.count);
+    
+    // Take top 5
+    const top5 = sorted.slice(0, 5);
+    const remaining = sorted.slice(5);
+    
+    // Group remaining as "Other"
+    if (remaining.length > 0) {
+      const otherCount = remaining.reduce((sum, item) => sum + item.count, 0);
+      return [...top5, { type: 'Other', count: otherCount }];
+    }
+    
+    return top5;
+  }, [ticket_types]);
+
   return (
     <div className="dashboard">
       <div className="stats-grid">
@@ -176,13 +196,13 @@ function Dashboard({ insights }) {
           </ResponsiveContainer>
         </div>
 
-        {ticket_types && ticket_types.length > 0 && (
+        {groupedTicketTypes && groupedTicketTypes.length > 0 && (
           <div className="chart-card">
-            <h3>Ticket Types Distribution</h3>
+            <h3>Ticket Types Distribution (Top 5)</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={ticket_types}
+                  data={groupedTicketTypes}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -192,7 +212,7 @@ function Dashboard({ insights }) {
                   dataKey="count"
                   nameKey="type"
                 >
-                  {ticket_types.map((entry, index) => (
+                  {groupedTicketTypes.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
