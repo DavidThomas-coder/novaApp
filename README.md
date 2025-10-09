@@ -1,21 +1,34 @@
-# 🎭 The Nova Comedy Collective - Dashboard
+# Nova Analytics Dashboard
 
-An analytics dashboard that connects to the Eventbrite API to provide insights on ticket buyers for The Nova Comedy Collective shows.
+Full-stack analytics dashboard built with React and Flask that integrates with the Eventbrite API to track ticket sales, attendee demographics, and event performance metrics for The Nova Comedy Collective. Provides real-time visualization of key performance indicators including attendance trends, customer retention rates, and revenue analytics to support data-driven decision-making.
 
-## Features
+## Key Features
 
-- **Multi-Organization Support**: Seamlessly switch between multiple Eventbrite organizations with a dropdown selector
-- **Dashboard Overview**: View key metrics including total events, attendees, unique customers, and repeat customer rates
-- **Data Visualizations**: Interactive charts showing monthly trends, attendee patterns, and ticket type distributions
-- **Event Management**: Browse all events with detailed information
-- **Attendee Details**: View complete attendee lists with search functionality
-- **Modern UI**: Beautiful, responsive design with smooth animations
+### Data Analytics & Visualization
+- **Real-time Metrics**: Track total events, attendees, unique customers, and repeat customer rates
+- **Interactive Charts**: Line charts, bar charts, and pie charts powered by Recharts
+- **Event Filtering**: Filter monthly trends by specific show or view aggregate data
+- **Date Range Analysis**: Automated monthly trend aggregation with custom date formatting
 
-## Tech Stack
+### Event Management
+- **Organization Filtering**: Automatic filtering to Nova Comedy Collective organization
+- **Event Browser**: Browse all events with status badges and metadata
+- **Attendee Management**: Complete attendee lists with search functionality and export capabilities
+- **Pagination Support**: Efficiently handles 100+ events via Eventbrite API pagination
 
-- **Backend**: Flask (Python) with Eventbrite API integration
-- **Frontend**: React with Recharts for data visualization
-- **Styling**: Custom CSS with gradient themes
+### Technical Features
+- **RESTful API**: Clean separation between frontend and backend
+- **Error Handling**: Comprehensive error states and user feedback
+- **Responsive Design**: Mobile-friendly interface with adaptive layouts
+- **Performance Optimized**: Efficient data fetching and caching strategies
+
+## Technologies
+
+- **Frontend**: React 18, Recharts, Axios
+- **Backend**: Flask (Python), RESTful API architecture
+- **External APIs**: Eventbrite API v3
+- **Styling**: Custom CSS with responsive design
+- **Version Control**: Git/GitHub
 
 ## Setup Instructions
 
