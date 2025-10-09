@@ -15,6 +15,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { exportMonthlyTrendsToCSV } from '../utils/csvExport';
+import DateRangeFilter from './DateRangeFilter';
 import './Dashboard.css';
 
 const COLORS = ['#ff1493', '#39ff14', '#ff00ff', '#00ffff', '#ffff00', '#ff6600'];
@@ -47,19 +48,33 @@ function Dashboard({ insights }) {
   } = insights;
 
   const [selectedEvent, setSelectedEvent] = React.useState('all');
+  const [dateRange, setDateRange] = React.useState({ start: '', end: '' });
 
-  // Filter monthly trends based on selected event
+  const handleDateRangeChange = (start, end) => {
+    setDateRange({ start, end });
+  };
+
+  // Filter monthly trends based on selected event and date range
   const filteredMonthlyTrends = React.useMemo(() => {
-    const data = selectedEvent === 'all' 
+    let data = selectedEvent === 'all' 
       ? monthly_trends 
       : events_monthly_data[selectedEvent] || [];
+    
+    // Filter by date range
+    if (dateRange.start || dateRange.end) {
+      data = data.filter(item => {
+        if (dateRange.start && item.month < dateRange.start.substring(0, 7)) return false;
+        if (dateRange.end && item.month > dateRange.end.substring(0, 7)) return false;
+        return true;
+      });
+    }
     
     // Add formatted month labels
     return data.map(item => ({
       ...item,
       monthLabel: formatMonthLabel(item.month)
     }));
-  }, [selectedEvent, monthly_trends, events_monthly_data]);
+  }, [selectedEvent, monthly_trends, events_monthly_data, dateRange]);
 
   // Group ticket types: top 5 + "Other"
   const groupedTicketTypes = React.useMemo(() => {
@@ -83,6 +98,8 @@ function Dashboard({ insights }) {
 
   return (
     <div className="dashboard">
+      <DateRangeFilter onDateRangeChange={handleDateRangeChange} />
+      
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon">🎪</div>

@@ -5,15 +5,34 @@ import './EventList.css';
 function EventList({ events, onEventSelect }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('date-desc');
   
   // Filter and search events
   const filteredEvents = useMemo(() => {
-    return events.filter(event => {
+    let filtered = events.filter(event => {
       const matchesSearch = event.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'all' || event.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
-  }, [events, searchTerm, statusFilter]);
+    
+    // Sort events
+    filtered.sort((a, b) => {
+      switch(sortBy) {
+        case 'date-desc':
+          return new Date(b.start) - new Date(a.start);
+        case 'date-asc':
+          return new Date(a.start) - new Date(b.start);
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        default:
+          return 0;
+      }
+    });
+    
+    return filtered;
+  }, [events, searchTerm, statusFilter, sortBy]);
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -69,6 +88,17 @@ function EventList({ events, onEventSelect }) {
           <option value="completed">Completed</option>
           <option value="draft">Draft</option>
           <option value="canceled">Canceled</option>
+        </select>
+        
+        <select 
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="event-status-filter"
+        >
+          <option value="date-desc">Newest First</option>
+          <option value="date-asc">Oldest First</option>
+          <option value="name-asc">Name A-Z</option>
+          <option value="name-desc">Name Z-A</option>
         </select>
         
         <button 
