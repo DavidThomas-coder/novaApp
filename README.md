@@ -4,23 +4,48 @@ Full-stack analytics dashboard built with React and Flask that integrates with t
 
 ## Key Features
 
-### Data Analytics & Visualization
-- **Real-time Metrics**: Track total events, attendees, unique customers, and repeat customer rates
-- **Interactive Charts**: Line charts, bar charts, and pie charts powered by Recharts
-- **Event Filtering**: Filter monthly trends by specific show or view aggregate data
-- **Date Range Analysis**: Automated monthly trend aggregation with custom date formatting
+### 💰 Revenue Analytics
+- **Total Revenue Tracking**: Comprehensive revenue analytics across all events
+- **Revenue Trends**: Monthly revenue charts with filtering by show
+- **Per-Event Metrics**: Average revenue per event and per ticket
+- **Ticket Type Revenue**: Revenue breakdown by ticket category
+- **Export Capabilities**: CSV export of all revenue data
 
-### Event Management
-- **Organization Filtering**: Automatic filtering to Nova Comedy Collective organization
-- **Event Browser**: Browse all events with status badges and metadata
-- **Attendee Management**: Complete attendee lists with search functionality and export capabilities
-- **Pagination Support**: Efficiently handles 100+ events via Eventbrite API pagination
+### 👥 Customer Intelligence
+- **Retention Analysis**: Track new vs. returning customer rates
+- **Lifetime Value**: Calculate average customer lifetime value
+- **Top Customers**: Identify most engaged customers with purchase history
+- **Customer Export**: Download customer lists for email campaigns
 
-### Technical Features
-- **RESTful API**: Clean separation between frontend and backend
-- **Error Handling**: Comprehensive error states and user feedback
-- **Responsive Design**: Mobile-friendly interface with adaptive layouts
-- **Performance Optimized**: Efficient data fetching and caching strategies
+### 📊 Event Performance
+- **Performance Rankings**: Sort events by revenue, attendance, or engagement
+- **Sell-Through Rates**: Track capacity utilization for each event
+- **Check-In Analytics**: Monitor actual attendance vs. ticket sales
+- **Comparative Metrics**: Compare performance across all shows
+
+### 🔮 Predictive Analytics
+- **Attendance Forecasting**: 3-month ahead predictions using linear regression
+- **Trend Analysis**: Identify growing, declining, or stable patterns
+- **Best Days Analysis**: Discover which days of the week perform best
+- **Seasonal Insights**: Understand seasonal performance patterns
+
+### 🎯 Interactive Filtering & Search
+- **Date Range Filters**: Last 30/90 days, 6/12 months, YTD, custom ranges
+- **Event Search**: Real-time search across all events
+- **Status Filters**: Filter by live, completed, draft, or canceled
+- **Sort Options**: Sort by date, name, revenue, or attendance
+- **Show-Specific Views**: Filter all analytics by specific show
+
+### 💾 Data Export
+- **CSV Export**: Export monthly trends, customers, events, and attendees
+- **Flexible Formats**: All exports include proper headers and formatting
+- **Contextual Naming**: Auto-generated filenames based on content
+
+### 📱 Performance & UX
+- **Caching System**: 5-minute localStorage cache for instant load times
+- **Mobile Optimized**: Fully responsive design for all screen sizes
+- **Loading States**: Skeleton screens and progress indicators
+- **Error Handling**: Graceful error states with retry functionality
 
 ## Technologies
 
@@ -118,24 +143,49 @@ If your Eventbrite API token has access to multiple organizations:
 
 ## Dashboard Views
 
-### Dashboard Tab
-- Total events count
-- Total attendees across all events
-- Unique customer count
-- Repeat customer statistics
-- Average attendees per event
-- Monthly trends (line and bar charts)
-- Ticket type distribution (pie chart)
+### 📊 Dashboard Tab
+- **8 Key Metrics Cards**: Events, attendees, customers, repeat rate, revenue, and averages
+- **Monthly Trends Charts**: Interactive line and bar charts with event filtering
+- **Revenue by Month**: Track financial performance over time
+- **Ticket Distribution**: Top 5 ticket types in pie chart
+- **Date Range Filters**: Analyze specific time periods
+- **Export Data**: Download monthly trends to CSV
 
-### Events Tab
-- List of all events with status badges
-- Event dates and capacity information
-- Click any event to view detailed attendee information
+### 👥 Customers Tab
+- **Customer Metrics**: New customers, returning customers, retention rates
+- **Lifetime Value**: Average customer value calculation
+- **Top 10 Leaderboard**: Most engaged customers with medal rankings
+- **Engagement Tracking**: Events attended and total spend per customer
+- **Export Customers**: Download customer data for outreach
 
-### Event Details View
-- Complete attendee list with search functionality
-- Ticket type breakdown
-- Exportable attendee data
+### 🏆 Performance Tab
+- **Event Rankings**: Sortable table of all events by multiple metrics
+- **Revenue Leaders**: Identify highest-grossing shows
+- **Attendance Leaders**: See most popular events
+- **Sell-Through Rates**: Capacity utilization for each event
+- **Check-In Rates**: Actual attendance vs. tickets sold
+- **Top 10/20/50 Views**: Focus on top performers
+
+### 🔮 Insights Tab (Predictive Analytics)
+- **3-Month Forecast**: Attendance predictions using linear regression
+- **Trend Indicators**: Growing, declining, or stable patterns
+- **Best Days Analysis**: Optimal days of week for scheduling
+- **Seasonal Patterns**: Winter/Spring/Summer/Fall performance comparison
+- **Growth Rates**: Month-over-month change calculations
+
+### 📅 Events Tab
+- **Complete Event Listing**: All 179+ events with full details
+- **Advanced Search**: Real-time search by event name
+- **Status Filters**: Filter by live, completed, draft, canceled
+- **Sort Options**: By date (newest/oldest) or name (A-Z/Z-A)
+- **Quick Details**: Click any event for full attendee breakdown
+- **Export Events**: Download filtered event lists
+
+### 🎫 Event Details View
+- **Attendee Table**: Searchable list of all ticket holders
+- **Ticket Breakdown**: Distribution by ticket type
+- **Check-In Status**: Track who actually attended
+- **Export Attendees**: Download attendee data per event
 
 ## Project Structure
 
