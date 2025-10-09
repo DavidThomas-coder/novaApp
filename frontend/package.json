@@ -1,7 +1,7 @@
 {
-  "name": "nova-comedy-dashboard",
+  "name": "nova-analytics-dashboard",
   "version": "1.0.0",
-  "description": "The Nova Comedy Collective - Eventbrite Analytics Dashboard",
+  "description": "Nova Analytics Dashboard - Full-stack analytics platform for The Nova Comedy Collective",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
