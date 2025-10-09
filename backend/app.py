@@ -154,10 +154,116 @@ def get_event_attendees(event_id):
                 'created': attendee.get('created', ''),
                 'status': attendee.get('status', ''),
                 'ticket_class_name': attendee.get('ticket_class_name', ''),
-                'quantity': attendee.get('quantity', 1)
+                'quantity': attendee.get('quantity', 1),
+                'checked_in': attendee.get('checked_in', False)
             })
         
         return jsonify({'attendees': formatted_attendees})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/event-performance', methods=['GET'])
+def get_event_performance():
+    """Get event performance rankings"""
+    try:
+        org_id = request.args.get('org_id')
+        
+        if not org_id:
+            org_response = requests.get(
+                f"{EVENTBRITE_API_BASE}/users/me/organizations/",
+                headers=get_headers()
+            )
+            
+            if org_response.status_code != 200:
+                return jsonify({'error': 'Failed to fetch organization'}), 500
+            
+            organizations = org_response.json().get('organizations', [])
+            if not organizations:
+                return jsonify({'error': 'No organization found'}), 404
+            
+            org_id = organizations[0]['id']
+        
+        # Get all events with pagination
+        all_events = []
+        continuation = None
+        
+        while True:
+            params = {'status': 'all', 'order_by': 'start_desc'}
+            if continuation:
+                params['continuation'] = continuation
+            
+            events_response = requests.get(
+                f"{EVENTBRITE_API_BASE}/organizations/{org_id}/events/",
+                headers=get_headers(),
+                params=params
+            )
+            
+            if events_response.status_code != 200:
+                return jsonify({'error': 'Failed to fetch events'}), 500
+            
+            events_data = events_response.json()
+            page_events = events_data.get('events', [])
+            all_events.extend(page_events)
+            
+            pagination = events_data.get('pagination', {})
+            if not pagination.get('has_more_items', False):
+                break
+            
+            continuation = pagination.get('continuation')
+            if not continuation:
+                break
+        
+        # Calculate performance metrics for each event
+        event_performance = []
+        
+        for event in all_events:
+            event_id = event['id']
+            event_name = event['name']['text']
+            capacity = event.get('capacity', 0)
+            status = event.get('status', '')
+            
+            # Get attendees
+            attendees_response = requests.get(
+                f"{EVENTBRITE_API_BASE}/events/{event_id}/attendees/",
+                headers=get_headers(),
+                params={'status': 'attending'}
+            )
+            
+            if attendees_response.status_code == 200:
+                attendees = attendees_response.json().get('attendees', [])
+                attendee_count = len(attendees)
+                checked_in_count = sum(1 for a in attendees if a.get('checked_in', False))
+                
+                # Calculate revenue
+                total_event_revenue = 0
+                for attendee in attendees:
+                    costs = attendee.get('costs', {})
+                    gross = costs.get('gross', {})
+                    revenue_cents = gross.get('value', 0)
+                    total_event_revenue += revenue_cents / 100.0
+                
+                # Calculate sell-through rate
+                sell_through_rate = (attendee_count / capacity * 100) if capacity > 0 else 0
+                check_in_rate = (checked_in_count / attendee_count * 100) if attendee_count > 0 else 0
+                
+                event_performance.append({
+                    'id': event_id,
+                    'name': event_name,
+                    'status': status,
+                    'capacity': capacity,
+                    'attendees': attendee_count,
+                    'checked_in': checked_in_count,
+                    'revenue': round(total_event_revenue, 2),
+                    'sell_through_rate': round(sell_through_rate, 2),
+                    'check_in_rate': round(check_in_rate, 2),
+                    'avg_ticket_price': round(total_event_revenue / attendee_count, 2) if attendee_count > 0 else 0
+                })
+        
+        # Sort by revenue for rankings
+        event_performance.sort(key=lambda x: x['revenue'], reverse=True)
+        
+        return jsonify({'events': event_performance})
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
