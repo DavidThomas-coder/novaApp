@@ -4,6 +4,7 @@ import './App.css';
 import Dashboard from './components/Dashboard';
 import EventList from './components/EventList';
 import EventDetails from './components/EventDetails';
+import CustomerInsights from './components/CustomerInsights';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
@@ -142,6 +143,12 @@ function App() {
             Dashboard
           </button>
           <button 
+            className={activeView === 'customers' ? 'active' : ''}
+            onClick={() => setActiveView('customers')}
+          >
+            Customers
+          </button>
+          <button 
             className={activeView === 'events' ? 'active' : ''}
             onClick={() => setActiveView('events')}
           >
@@ -153,6 +160,10 @@ function App() {
       <main className="app-main">
         {activeView === 'dashboard' && insights && (
           <Dashboard insights={insights} />
+        )}
+        
+        {activeView === 'customers' && insights && (
+          <CustomerInsights insights={insights} />
         )}
         
         {activeView === 'events' && (

@@ -228,6 +228,8 @@ def get_insights():
         ticket_revenue = defaultdict(float)
         unique_emails = set()
         repeat_customers = defaultdict(int)
+        customer_revenue = defaultdict(float)  # email -> total revenue
+        customer_event_dates = defaultdict(list)  # email -> list of event dates
         events_list = []  # List of events with monthly data for filtering
         events_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> event count
         attendees_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> attendee count
@@ -270,6 +272,7 @@ def get_insights():
                     if email:
                         repeat_customers[email] += 1
                         unique_emails.add(email)
+                        customer_event_dates[email].append(month_key)
                     
                     ticket_class = attendee.get('ticket_class_name', 'Unknown')
                     ticket_types[ticket_class] += 1
@@ -283,10 +286,27 @@ def get_insights():
                     total_revenue += revenue_dollars
                     revenue_by_month[month_key] += revenue_dollars
                     ticket_revenue[ticket_class] += revenue_dollars
+                    
+                    if email:
+                        customer_revenue[email] += revenue_dollars
         
         # Calculate repeat customer percentage
         repeat_customer_count = sum(1 for count in repeat_customers.values() if count > 1)
         repeat_customer_rate = (repeat_customer_count / len(unique_emails) * 100) if unique_emails else 0
+        new_customer_count = len(unique_emails) - repeat_customer_count
+        
+        # Calculate customer lifetime value
+        avg_customer_lifetime_value = (total_revenue / len(unique_emails)) if unique_emails else 0
+        
+        # Find top customers by event attendance
+        top_customers = sorted(repeat_customers.items(), key=lambda x: x[1], reverse=True)[:10]
+        top_customers_data = []
+        for email, event_count in top_customers:
+            top_customers_data.append({
+                'email': email,
+                'events_attended': event_count,
+                'lifetime_value': round(customer_revenue.get(email, 0), 2)
+            })
         
         # Format monthly data for charts
         monthly_data = []
@@ -327,13 +347,16 @@ def get_insights():
             'avg_revenue_per_event': round(total_revenue / total_events, 2) if total_events > 0 else 0,
             'avg_revenue_per_ticket': round(total_revenue / total_attendees, 2) if total_attendees > 0 else 0,
             'unique_customers': len(unique_emails),
+            'new_customers': new_customer_count,
             'repeat_customers': repeat_customer_count,
             'repeat_customer_rate': round(repeat_customer_rate, 2),
+            'avg_customer_lifetime_value': round(avg_customer_lifetime_value, 2),
             'avg_attendees_per_event': round(total_attendees / total_events, 2) if total_events > 0 else 0,
             'monthly_trends': monthly_data,
             'ticket_types': ticket_data,
             'events_list': events_list,
-            'events_monthly_data': events_monthly_data
+            'events_monthly_data': events_monthly_data,
+            'top_customers': top_customers_data
         }
         
         return jsonify(insights)
