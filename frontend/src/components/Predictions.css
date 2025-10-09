@@ -112,7 +112,14 @@
 .insight-card h3 {
   color: #39ff14;
   font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.insight-subtitle {
+  color: #888;
+  font-size: 0.9rem;
   margin-bottom: 20px;
+  font-style: italic;
 }
 
 .best-days-list {

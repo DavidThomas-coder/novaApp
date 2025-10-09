@@ -11,37 +11,25 @@ function Predictions({ insights, events, orgId }) {
   const [performanceData, setPerformanceData] = useState([]);
   const [loadingPerf, setLoadingPerf] = useState(false);
 
-  // Load performance data in background for best days calculation
+  // Don't auto-load performance data - it uses too many API calls
+  // Instead, calculate best days from events list with basic attendance estimates
   useEffect(() => {
-    const loadPerformanceData = async () => {
-      if (!orgId) return;
-      setLoadingPerf(true);
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/event-performance`, {
-          params: { org_id: orgId },
-          timeout: 120000
-        });
-        setPerformanceData(response.data.events || []);
-      } catch (err) {
-        console.warn('Could not load performance data for predictions:', err);
-      } finally {
-        setLoadingPerf(false);
-      }
-    };
-    
-    loadPerformanceData();
-  }, [orgId]);
+    // Use events data we already have
+    if (events && events.length > 0) {
+      // The events don't have attendee counts, so we'll just show event frequency by day
+      setPerformanceData(events);
+    }
+  }, [events]);
 
   const forecast = useMemo(() => {
     return predictNextMonths(monthly_trends, 3);
   }, [monthly_trends]);
 
   const bestDays = useMemo(() => {
-    if (performanceData.length === 0) {
-      return [{name: 'Loading...', avgAttendees: 0, count: 0}];
-    }
-    return analyzeBestDays(performanceData);
-  }, [performanceData]);
+    // Use events data to show frequency by day
+    const daysAnalysis = analyzeBestDays(performanceData.length > 0 ? performanceData : events);
+    return daysAnalysis.filter(day => day.count > 0); // Only show days with events
+  }, [performanceData, events]);
 
   const seasonality = useMemo(() => {
     return analyzeSeasonality(monthly_trends);
@@ -133,7 +121,8 @@ function Predictions({ insights, events, orgId }) {
 
       <div className="insights-grid">
         <div className="insight-card">
-          <h3>Best Days for Events</h3>
+          <h3>Most Popular Days for Shows</h3>
+          <p className="insight-subtitle">Based on event frequency</p>
           <div className="best-days-list">
             {bestDays.slice(0, 5).map((day, index) => (
               <div key={day.name} className="day-item">
@@ -144,8 +133,10 @@ function Predictions({ insights, events, orgId }) {
                   {index + 1 > 3 && `#${index + 1}`}
                 </span>
                 <span className="day-name">{day.name}</span>
-                <span className="day-avg">{day.avgAttendees} avg attendees</span>
-                <span className="day-count">({day.count} events)</span>
+                <span className="day-count">{day.count} events scheduled</span>
+                {day.avgAttendees > 0 && (
+                  <span className="day-avg">{day.avgAttendees} avg attendees</span>
+                )}
               </div>
             ))}
           </div>

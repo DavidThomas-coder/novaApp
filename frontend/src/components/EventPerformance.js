@@ -6,16 +6,14 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 function EventPerformance({ orgId }) {
   const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [sortBy, setSortBy] = useState('revenue');
   const [showCount, setShowCount] = useState(20);
 
-  useEffect(() => {
-    loadPerformance();
-  }, [orgId]);
-
   const loadPerformance = async () => {
     setLoading(true);
+    setHasLoaded(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/api/event-performance`, {
         params: { org_id: orgId },
@@ -24,6 +22,7 @@ function EventPerformance({ orgId }) {
       setEvents(response.data.events);
     } catch (err) {
       console.error('Failed to load performance data:', err);
+      alert('Failed to load performance data. You may have hit the API rate limit. Please wait 2-3 minutes and try again.');
       setEvents([]);
     } finally {
       setLoading(false);
@@ -48,8 +47,51 @@ function EventPerformance({ orgId }) {
     return sorted.slice(0, showCount);
   }, [events, sortBy, showCount]);
 
+  if (!hasLoaded) {
+    return (
+      <div className="event-performance">
+        <h2 className="section-title">Event Performance Rankings</h2>
+        <p className="tab-description">
+          Compare all events by attendance, revenue, sell-through rates, and check-in rates. 
+          Identify your best-performing shows and track which events drive the most engagement.
+        </p>
+        
+        <div className="load-warning">
+          <div className="warning-icon">⚠️</div>
+          <div className="warning-content">
+            <h3>Performance Data Not Loaded</h3>
+            <p>
+              This analysis requires fetching detailed data for all 179+ events, which makes 
+              approximately 180 API calls to Eventbrite. To avoid hitting rate limits, 
+              click the button below only when you need this detailed analysis.
+            </p>
+            <p className="hint-text">
+              💡 Tip: Once loaded, the data will be available for this session. 
+              Avoid reloading this tab frequently.
+            </p>
+            <button 
+              onClick={loadPerformance}
+              className="load-performance-button"
+            >
+              📊 Load Performance Data
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
-    return <div className="loading">Loading performance data...</div>;
+    return (
+      <div className="event-performance">
+        <h2 className="section-title">Event Performance Rankings</h2>
+        <div className="loading">
+          <div className="spinner"></div>
+          <p>Loading performance data for all events...</p>
+          <p className="loading-detail">This may take 1-2 minutes. Please be patient.</p>
+        </div>
+      </div>
+    );
   }
 
   return (

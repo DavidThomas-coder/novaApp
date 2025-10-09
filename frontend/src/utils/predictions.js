@@ -105,11 +105,14 @@ export const analyzeBestDays = (events) => {
   };
 
   events.forEach(event => {
-    if (event.start && event.attendees !== undefined) {
+    if (event.start) {
       const date = new Date(event.start);
       const day = date.getDay();
       dayStats[day].count++;
-      dayStats[day].totalAttendees += event.attendees;
+      // Use attendees if available, otherwise just count events
+      if (event.attendees !== undefined) {
+        dayStats[day].totalAttendees += event.attendees;
+      }
     }
   });
 
