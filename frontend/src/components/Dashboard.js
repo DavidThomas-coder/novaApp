@@ -69,10 +69,14 @@ function Dashboard({ insights }) {
       });
     }
     
-    // Add formatted month labels
+    // Add formatted month labels and mark future months
+    const now = new Date();
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    
     return data.map(item => ({
       ...item,
-      monthLabel: formatMonthLabel(item.month)
+      monthLabel: formatMonthLabel(item.month),
+      isFuture: item.month > currentMonth
     }));
   }, [selectedEvent, monthly_trends, events_monthly_data, dateRange]);
 
@@ -204,6 +208,7 @@ function Dashboard({ insights }) {
       <div className="charts-grid">
         <div className="chart-card">
           <h3>Monthly Trends</h3>
+          <p className="chart-subtitle">Future months shown with dashed lines</p>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={filteredMonthlyTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -224,6 +229,7 @@ function Dashboard({ insights }) {
                 stroke="#ff1493" 
                 strokeWidth={3}
                 name="Events"
+                strokeDasharray={(entry) => entry.isFuture ? '5 5' : '0'}
               />
               <Line 
                 type="monotone" 
@@ -231,6 +237,7 @@ function Dashboard({ insights }) {
                 stroke="#39ff14" 
                 strokeWidth={3}
                 name="Attendees"
+                strokeDasharray={(entry) => entry.isFuture ? '5 5' : '0'}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -238,6 +245,7 @@ function Dashboard({ insights }) {
 
         <div className="chart-card">
           <h3>Attendees by Month</h3>
+          <p className="chart-subtitle">Future months shown with opacity</p>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={filteredMonthlyTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -251,13 +259,18 @@ function Dashboard({ insights }) {
                   color: '#39ff14'
                 }} 
               />
-              <Bar dataKey="attendees" fill="#ff1493" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="attendees" radius={[8, 8, 0, 0]}>
+                {filteredMonthlyTrends.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.isFuture ? 'rgba(255, 20, 147, 0.3)' : '#ff1493'} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         <div className="chart-card">
           <h3>Gross Revenue by Month</h3>
+          <p className="chart-subtitle">Future months shown with opacity</p>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={filteredMonthlyTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -272,7 +285,11 @@ function Dashboard({ insights }) {
                 }}
                 formatter={(value) => `$${value.toLocaleString()}`}
               />
-              <Bar dataKey="revenue" fill="#39ff14" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="revenue" radius={[8, 8, 0, 0]}>
+                {filteredMonthlyTrends.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.isFuture ? 'rgba(57, 255, 20, 0.3)' : '#39ff14'} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
