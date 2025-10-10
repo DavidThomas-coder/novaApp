@@ -5,6 +5,7 @@ import './CustomerInsights.css';
 function CustomerInsights({ insights }) {
   const [showAllCustomers, setShowAllCustomers] = useState(false);
   const [customerSearch, setCustomerSearch] = useState('');
+  const [expandedCustomer, setExpandedCustomer] = useState(null);
   const {
     new_customers = 0,
     repeat_customers = 0,
@@ -193,14 +194,50 @@ function CustomerInsights({ insights }) {
             </thead>
             <tbody>
               {displayedCustomers.map((customer) => (
-                <tr key={customer.email}>
-                  <td className="email-cell">{customer.email}</td>
-                  <td className="events-count-cell">{customer.total_events}</td>
-                  <td className="value-cell">${customer.lifetime_value.toFixed(2)}</td>
-                  <td className="months-cell">
-                    {customer.event_months.length} {customer.event_months.length === 1 ? 'month' : 'months'}
-                  </td>
-                </tr>
+                <React.Fragment key={customer.email}>
+                  <tr 
+                    onClick={() => setExpandedCustomer(expandedCustomer === customer.email ? null : customer.email)}
+                    className="customer-row clickable"
+                  >
+                    <td className="email-cell">
+                      <span className="expand-icon">
+                        {expandedCustomer === customer.email ? '▼' : '▶'}
+                      </span>
+                      {customer.email}
+                    </td>
+                    <td className="events-count-cell">{customer.total_events}</td>
+                    <td className="value-cell">${customer.lifetime_value.toFixed(2)}</td>
+                    <td className="months-cell">
+                      {customer.event_months.length} {customer.event_months.length === 1 ? 'month' : 'months'}
+                    </td>
+                  </tr>
+                  {expandedCustomer === customer.email && (
+                    <tr className="expanded-row">
+                      <td colSpan="4">
+                        <div className="event-details-list">
+                          <h4>Events Attended:</h4>
+                          <div className="events-grid-small">
+                            {customer.events && customer.events.map((event, idx) => {
+                              const eventDate = new Date(event.event_date);
+                              const formattedDate = eventDate.toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric'
+                              });
+                              
+                              return (
+                                <div key={idx} className="event-badge">
+                                  <span className="badge-name">{event.event_name}</span>
+                                  <span className="badge-date">{formattedDate}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>

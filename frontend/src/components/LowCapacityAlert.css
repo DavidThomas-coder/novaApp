@@ -81,6 +81,12 @@
   font-size: 1.05rem;
 }
 
+.event-date {
+  color: #39ff14;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 .capacity-info {
   color: #888;
   font-size: 0.9rem;

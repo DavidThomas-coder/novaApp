@@ -281,6 +281,7 @@ def get_event_performance():
                     'id': event_id,
                     'name': event_name,
                     'status': status,
+                    'start': event['start']['local'],
                     'capacity': capacity,
                     'attendees': attendee_count,
                     'checked_in': checked_in_count,
@@ -366,6 +367,7 @@ def get_insights():
         repeat_customers = defaultdict(int)
         customer_revenue = defaultdict(float)  # email -> total revenue
         customer_event_dates = defaultdict(list)  # email -> list of event dates
+        customer_events = defaultdict(list)  # email -> list of {event_name, date}
         events_list = []  # List of events with monthly data for filtering
         events_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> event count
         attendees_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> attendee count
@@ -422,6 +424,11 @@ def get_insights():
                         repeat_customers[email] += 1
                         unique_emails.add(email)
                         customer_event_dates[email].append(month_key)
+                        customer_events[email].append({
+                            'event_name': event_name,
+                            'event_date': event_start,
+                            'event_id': event_id
+                        })
                     
                     ticket_class = attendee.get('ticket_class_name', 'Unknown')
                     ticket_types[ticket_class] += 1
@@ -465,11 +472,18 @@ def get_insights():
         # Build detailed customer event history
         customer_details = {}
         for email, events_attended in repeat_customers.items():
+            # Sort events by date
+            events_list_sorted = sorted(
+                customer_events.get(email, []), 
+                key=lambda x: x['event_date']
+            )
+            
             customer_details[email] = {
                 'email': email,
                 'total_events': events_attended,
                 'lifetime_value': round(customer_revenue.get(email, 0), 2),
-                'event_months': sorted(set(customer_event_dates.get(email, [])))
+                'event_months': sorted(set(customer_event_dates.get(email, []))),
+                'events': events_list_sorted
             }
         
         # Calculate average capacity utilization (already tracked during event loop)
