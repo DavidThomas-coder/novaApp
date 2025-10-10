@@ -137,6 +137,12 @@
 
 .loading p {
   font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.loading .loading-detail {
+  font-size: 0.95rem;
+  color: #888;
 }
 
 .error {

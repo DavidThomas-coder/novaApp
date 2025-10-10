@@ -81,9 +81,16 @@ function App() {
   const loadDataFromAPI = async () => {
     try {
       // Load insights and events in parallel with org_id parameter
+      // Note: insights can take 2+ minutes with 179 events
       const [insightsRes, eventsRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/insights`, { params: { org_id: selectedOrgId } }),
-        axios.get(`${API_BASE_URL}/api/events`, { params: { org_id: selectedOrgId } })
+        axios.get(`${API_BASE_URL}/api/insights`, { 
+          params: { org_id: selectedOrgId },
+          timeout: 180000 // 3 minute timeout
+        }),
+        axios.get(`${API_BASE_URL}/api/events`, { 
+          params: { org_id: selectedOrgId },
+          timeout: 60000 // 1 minute timeout
+        })
       ]);
       
       const insightsData = insightsRes.data;
@@ -128,6 +135,7 @@ function App() {
         <div className="loading">
           <div className="spinner"></div>
           <p>Loading Nova Comedy Collective data...</p>
+          <p className="loading-detail">Analyzing 179+ events... this may take 1-2 minutes</p>
         </div>
       </div>
     );
