@@ -8,6 +8,7 @@ import EventDetails from './components/EventDetails';
 import CustomerInsights from './components/CustomerInsights';
 import EventPerformance from './components/EventPerformance';
 import Predictions from './components/Predictions';
+import WeeklySales from './components/WeeklySales';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
@@ -204,6 +205,12 @@ function App() {
             Insights
           </button>
           <button 
+            className={activeView === 'weekly-sales' ? 'active' : ''}
+            onClick={() => setActiveView('weekly-sales')}
+          >
+            Weekly Report
+          </button>
+          <button 
             className={activeView === 'events' ? 'active' : ''}
             onClick={() => setActiveView('events')}
           >
@@ -227,6 +234,10 @@ function App() {
         
         {activeView === 'predictions' && insights && (
           <Predictions insights={insights} events={events} orgId={selectedOrgId} />
+        )}
+        
+        {activeView === 'weekly-sales' && (
+          <WeeklySales orgId={selectedOrgId} />
         )}
         
         {activeView === 'events' && (

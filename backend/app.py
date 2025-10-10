@@ -3,7 +3,7 @@ from flask_cors import CORS
 import requests
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import defaultdict
 
 app = Flask(__name__)
@@ -488,6 +488,123 @@ def get_insights():
         }
         
         return jsonify(insights)
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/weekly-sales', methods=['GET'])
+def get_weekly_sales():
+    """Get weekly sales report"""
+    try:
+        org_id = request.args.get('org_id')
+        week_offset = int(request.args.get('week_offset', 0))  # 0 = current week, -1 = last week, etc.
+        
+        if not org_id:
+            org_response = make_api_request(
+                f"{EVENTBRITE_API_BASE}/users/me/organizations/"
+            )
+            
+            if not org_response or org_response.status_code != 200:
+                return jsonify({'error': 'Failed to fetch organization'}), 500
+            
+            organizations = org_response.json().get('organizations', [])
+            if not organizations:
+                return jsonify({'error': 'No organization found'}), 404
+            
+            org_id = organizations[0]['id']
+        
+        # Calculate week start (Monday) and end (Sunday)
+        today = datetime.now().date()
+        days_since_monday = today.weekday()
+        week_start = today - timedelta(days=days_since_monday) + timedelta(weeks=week_offset)
+        week_end = week_start + timedelta(days=6)
+        
+        # Get all events with pagination
+        all_events = []
+        continuation = None
+        
+        while True:
+            params = {'status': 'all', 'order_by': 'start_asc'}
+            if continuation:
+                params['continuation'] = continuation
+            
+            events_response = make_api_request(
+                f"{EVENTBRITE_API_BASE}/organizations/{org_id}/events/",
+                params=params
+            )
+            
+            if not events_response or events_response.status_code != 200:
+                return jsonify({'error': 'Failed to fetch events'}), 500
+            
+            events_data = events_response.json()
+            page_events = events_data.get('events', [])
+            all_events.extend(page_events)
+            
+            pagination = events_data.get('pagination', {})
+            if not pagination.get('has_more_items', False):
+                break
+            
+            continuation = pagination.get('continuation')
+            if not continuation:
+                break
+        
+        # Filter events for the selected week and get attendee data
+        weekly_sales = []
+        total_tickets = 0
+        total_revenue = 0
+        
+        for event in all_events:
+            event_id = event['id']
+            event_name = event['name']['text']
+            event_start = event['start']['local']
+            
+            # Parse event date
+            event_date = datetime.fromisoformat(event_start.replace('Z', '+00:00')).date()
+            
+            # Check if event is in the selected week
+            if week_start <= event_date <= week_end:
+                # Get attendees
+                attendees_response = make_api_request(
+                    f"{EVENTBRITE_API_BASE}/events/{event_id}/attendees/",
+                    params={'status': 'attending'}
+                )
+                
+                if attendees_response and attendees_response.status_code == 200:
+                    attendees = attendees_response.json().get('attendees', [])
+                    tickets_sold = len(attendees)
+                    
+                    # Calculate revenue
+                    event_revenue = 0
+                    for attendee in attendees:
+                        costs = attendee.get('costs', {})
+                        gross = costs.get('gross', {})
+                        revenue_cents = gross.get('value', 0)
+                        event_revenue += revenue_cents / 100.0
+                    
+                    weekly_sales.append({
+                        'event_name': event_name,
+                        'event_date': event_start,
+                        'tickets_sold': tickets_sold,
+                        'gross_revenue': round(event_revenue, 2)
+                    })
+                    
+                    total_tickets += tickets_sold
+                    total_revenue += event_revenue
+                    
+                    # Add small delay to avoid rate limiting
+                    time.sleep(0.1)
+        
+        # Sort by event date
+        weekly_sales.sort(key=lambda x: x['event_date'])
+        
+        return jsonify({
+            'week_start': week_start.isoformat(),
+            'week_end': week_end.isoformat(),
+            'events': weekly_sales,
+            'total_tickets': total_tickets,
+            'total_revenue': round(total_revenue, 2),
+            'event_count': len(weekly_sales)
+        })
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
