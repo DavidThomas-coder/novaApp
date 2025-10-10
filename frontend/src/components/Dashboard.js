@@ -16,6 +16,7 @@ import {
 } from 'recharts';
 import { exportMonthlyTrendsToCSV } from '../utils/csvExport';
 import DateRangeFilter from './DateRangeFilter';
+import LowCapacityAlert from './LowCapacityAlert';
 import './Dashboard.css';
 
 const COLORS = ['#ff1493', '#39ff14', '#ff00ff', '#00ffff', '#ffff00', '#ff6600'];
@@ -30,7 +31,7 @@ const formatMonthLabel = (monthKey) => {
   return `${monthName} '${shortYear}`;
 };
 
-function Dashboard({ insights }) {
+function Dashboard({ insights, orgId }) {
   const {
     total_events,
     total_attendees,
@@ -111,6 +112,8 @@ function Dashboard({ insights }) {
       </p>
       
       <DateRangeFilter onDateRangeChange={handleDateRangeChange} />
+      
+      <LowCapacityAlert orgId={orgId} />
       
       <div className="stats-grid">
         <div className="stat-card">

@@ -462,6 +462,16 @@ def get_insights():
         pseudo_subscriber_rate = (pseudo_subscribers / len(unique_emails) * 100) if unique_emails else 0
         multi_show_buyers = sum(1 for count in repeat_customers.values() if count >= 2)
         
+        # Build detailed customer event history
+        customer_details = {}
+        for email, events_attended in repeat_customers.items():
+            customer_details[email] = {
+                'email': email,
+                'total_events': events_attended,
+                'lifetime_value': round(customer_revenue.get(email, 0), 2),
+                'event_months': sorted(set(customer_event_dates.get(email, [])))
+            }
+        
         # Calculate average capacity utilization (already tracked during event loop)
         capacity_utilization = (capacity_events_attendees / total_capacity * 100) if total_capacity > 0 else 0
         
@@ -529,7 +539,9 @@ def get_insights():
             'total_capacity': total_capacity,
             # Retention cohort metrics
             'first_time_customers': first_time_customers,
-            'first_timer_retention_rate': round(first_timer_retention_rate, 2)
+            'first_timer_retention_rate': round(first_timer_retention_rate, 2),
+            # Customer details for expanded view
+            'customer_details': list(customer_details.values())
         }
         
         return jsonify(insights)

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { exportCustomersToCSV } from '../utils/csvExport';
 import './CustomerInsights.css';
 
 function CustomerInsights({ insights }) {
+  const [showAllCustomers, setShowAllCustomers] = useState(false);
+  const [customerSearch, setCustomerSearch] = useState('');
   const {
     new_customers = 0,
     repeat_customers = 0,
@@ -14,8 +16,18 @@ function CustomerInsights({ insights }) {
     multi_show_buyers = 0,
     first_time_customers = 0,
     first_timer_retention_rate = 0,
-    unique_customers = 0
+    unique_customers = 0,
+    customer_details = []
   } = insights;
+  
+  // Filter customers for detailed view
+  const filteredCustomers = customer_details.filter(customer =>
+    customer.email.toLowerCase().includes(customerSearch.toLowerCase())
+  );
+  
+  const displayedCustomers = showAllCustomers 
+    ? filteredCustomers 
+    : filteredCustomers.slice(0, 20);
 
   return (
     <div className="customer-insights">
@@ -154,6 +166,55 @@ function CustomerInsights({ insights }) {
           </div>
         </div>
       )}
+      
+      <div className="customer-history-card">
+        <div className="customers-header">
+          <h3>Customer Event History ({customer_details.length} total)</h3>
+          <div className="customer-controls">
+            <input
+              type="text"
+              placeholder="Search by email..."
+              value={customerSearch}
+              onChange={(e) => setCustomerSearch(e.target.value)}
+              className="customer-search-input"
+            />
+          </div>
+        </div>
+        
+        <div className="customer-history-table-container">
+          <table className="customer-history-table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Events Attended</th>
+                <th>Lifetime Value</th>
+                <th>Active Months</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedCustomers.map((customer) => (
+                <tr key={customer.email}>
+                  <td className="email-cell">{customer.email}</td>
+                  <td className="events-count-cell">{customer.total_events}</td>
+                  <td className="value-cell">${customer.lifetime_value.toFixed(2)}</td>
+                  <td className="months-cell">
+                    {customer.event_months.length} {customer.event_months.length === 1 ? 'month' : 'months'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        
+        {!showAllCustomers && filteredCustomers.length > 20 && (
+          <button 
+            onClick={() => setShowAllCustomers(true)}
+            className="show-more-button"
+          >
+            Show All {filteredCustomers.length} Customers
+          </button>
+        )}
+      </div>
     </div>
   );
 }

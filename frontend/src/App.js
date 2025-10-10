@@ -229,7 +229,7 @@ function App() {
 
       <main className="app-main">
         {activeView === 'dashboard' && insights && (
-          <Dashboard insights={insights} />
+          <Dashboard insights={insights} orgId={selectedOrgId} />
         )}
         
         {activeView === 'customers' && insights && (

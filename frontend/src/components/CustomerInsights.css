@@ -264,6 +264,110 @@
   color: #fff;
 }
 
+.customer-history-card {
+  background: #0a0a0a;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.2);
+  border: 1px solid rgba(255, 20, 147, 0.3);
+  margin-top: 25px;
+}
+
+.customer-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.customer-search-input {
+  padding: 10px 20px;
+  border: 2px solid #ff1493;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #1a1a1a;
+  color: #39ff14;
+  min-width: 300px;
+}
+
+.customer-search-input::placeholder {
+  color: #666;
+}
+
+.customer-search-input:focus {
+  outline: none;
+  border-color: #39ff14;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+}
+
+.customer-history-table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.customer-history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.customer-history-table thead {
+  background: rgba(255, 20, 147, 0.1);
+}
+
+.customer-history-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #39ff14;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.customer-history-table td {
+  padding: 15px;
+  border-top: 1px solid #333;
+  color: #fff;
+}
+
+.customer-history-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.customer-history-table tbody tr:hover {
+  background-color: rgba(57, 255, 20, 0.05);
+}
+
+.events-count-cell {
+  text-align: center;
+  font-weight: 600;
+  color: #39ff14;
+}
+
+.months-cell {
+  text-align: center;
+  color: #888;
+}
+
+.show-more-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 15px;
+  background: rgba(255, 20, 147, 0.1);
+  border: 2px solid #ff1493;
+  color: #ff1493;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.show-more-button:hover {
+  background: rgba(255, 20, 147, 0.2);
+  border-color: #39ff14;
+  color: #39ff14;
+}
+
 @media (max-width: 768px) {
   .customer-stats-grid {
     grid-template-columns: 1fr;
@@ -276,6 +380,11 @@
   .top-customers-table th,
   .top-customers-table td {
     padding: 10px;
+  }
+  
+  .customer-search-input {
+    width: 100%;
+    min-width: 100%;
   }
 }
 
