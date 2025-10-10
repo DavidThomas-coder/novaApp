@@ -215,24 +215,28 @@ function CustomerInsights({ insights }) {
                     <tr className="expanded-row">
                       <td colSpan="4">
                         <div className="event-details-list">
-                          <h4>Events Attended:</h4>
-                          <div className="events-grid-small">
-                            {customer.events && customer.events.map((event, idx) => {
-                              const eventDate = new Date(event.event_date);
-                              const formattedDate = eventDate.toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric'
-                              });
-                              
-                              return (
-                                <div key={idx} className="event-badge">
-                                  <span className="badge-name">{event.event_name}</span>
-                                  <span className="badge-date">{formattedDate}</span>
-                                </div>
-                              );
-                            })}
-                          </div>
+                          <h4>Events Attended ({customer.events ? customer.events.length : 0}):</h4>
+                          {customer.events && customer.events.length > 0 ? (
+                            <div className="events-grid-small">
+                              {customer.events.map((event, idx) => {
+                                const eventDate = new Date(event.event_date);
+                                const formattedDate = eventDate.toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                });
+                                
+                                return (
+                                  <div key={idx} className="event-badge">
+                                    <span className="badge-name">{event.event_name}</span>
+                                    <span className="badge-date">{formattedDate}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <p className="no-events-message">Event details loading or unavailable. Try refreshing the page.</p>
+                          )}
                         </div>
                       </td>
                     </tr>
