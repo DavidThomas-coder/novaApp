@@ -369,6 +369,9 @@ def get_insights():
         events_list = []  # List of events with monthly data for filtering
         events_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> event count
         attendees_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> attendee count
+        # Capacity tracking
+        capacity_events_attendees = 0
+        total_capacity = 0
         
         for event in events:
             # Skip draft events
@@ -389,6 +392,12 @@ def get_insights():
                 attendees = attendees_response.json().get('attendees', [])
                 event_attendee_count = len(attendees)
                 total_attendees += event_attendee_count
+                
+                # Track capacity utilization
+                event_capacity = event.get('capacity', 0)
+                if event_capacity > 0:
+                    capacity_events_attendees += event_attendee_count
+                    total_capacity += event_capacity
                 
                 # Parse event date
                 event_start = event['start']['local']
@@ -453,14 +462,14 @@ def get_insights():
         pseudo_subscriber_rate = (pseudo_subscribers / len(unique_emails) * 100) if unique_emails else 0
         multi_show_buyers = sum(1 for count in repeat_customers.values() if count >= 2)
         
-        # Calculate average capacity utilization
-        events_with_capacity = [e for e in events if e.get('capacity', 0) > 0]
-        total_capacity = sum(e.get('capacity', 0) for e in events_with_capacity)
-        capacity_utilization = (total_attendees / total_capacity * 100) if total_capacity > 0 else 0
+        # Calculate average capacity utilization (already tracked during event loop)
+        capacity_utilization = (capacity_events_attendees / total_capacity * 100) if total_capacity > 0 else 0
         
-        # Cohort analysis: first-timer retention
-        first_time_customers = len(unique_emails) - repeat_customer_count
-        first_timer_retention_rate = (repeat_customer_count / len(unique_emails) * 100) if len(unique_emails) > 0 else 0
+        # Cohort analysis: first-timer retention  
+        # Count customers who only attended 1 event
+        first_time_customers = sum(1 for count in repeat_customers.values() if count == 1)
+        # First-timer retention = what % of all customers became repeat customers
+        first_timer_retention_rate = repeat_customer_rate  # Same metric, different context
         
         # Format monthly data for charts
         monthly_data = []
