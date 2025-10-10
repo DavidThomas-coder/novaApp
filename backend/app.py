@@ -448,6 +448,20 @@ def get_insights():
                 'lifetime_value': round(customer_revenue.get(email, 0), 2)
             })
         
+        # Calculate subscription behavior (customers with 3+ events = "pseudo-subscribers")
+        pseudo_subscribers = sum(1 for count in repeat_customers.values() if count >= 3)
+        pseudo_subscriber_rate = (pseudo_subscribers / len(unique_emails) * 100) if unique_emails else 0
+        multi_show_buyers = sum(1 for count in repeat_customers.values() if count >= 2)
+        
+        # Calculate average capacity utilization
+        events_with_capacity = [e for e in events if e.get('capacity', 0) > 0]
+        total_capacity = sum(e.get('capacity', 0) for e in events_with_capacity)
+        capacity_utilization = (total_attendees / total_capacity * 100) if total_capacity > 0 else 0
+        
+        # Cohort analysis: first-timer retention
+        first_time_customers = len(unique_emails) - repeat_customer_count
+        first_timer_retention_rate = (repeat_customer_count / len(unique_emails) * 100) if len(unique_emails) > 0 else 0
+        
         # Format monthly data for charts
         monthly_data = []
         for month in sorted(events_by_month.keys()):
@@ -496,7 +510,17 @@ def get_insights():
             'ticket_types': ticket_data,
             'events_list': events_list,
             'events_monthly_data': events_monthly_data,
-            'top_customers': top_customers_data
+            'top_customers': top_customers_data,
+            # Subscription behavior metrics
+            'pseudo_subscribers': pseudo_subscribers,
+            'pseudo_subscriber_rate': round(pseudo_subscriber_rate, 2),
+            'multi_show_buyers': multi_show_buyers,
+            # Capacity utilization metrics
+            'capacity_utilization': round(capacity_utilization, 2),
+            'total_capacity': total_capacity,
+            # Retention cohort metrics
+            'first_time_customers': first_time_customers,
+            'first_timer_retention_rate': round(first_timer_retention_rate, 2)
         }
         
         return jsonify(insights)

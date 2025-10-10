@@ -8,7 +8,13 @@ function CustomerInsights({ insights }) {
     repeat_customers = 0,
     repeat_customer_rate = 0,
     avg_customer_lifetime_value = 0,
-    top_customers = []
+    top_customers = [],
+    pseudo_subscribers = 0,
+    pseudo_subscriber_rate = 0,
+    multi_show_buyers = 0,
+    first_time_customers = 0,
+    first_timer_retention_rate = 0,
+    unique_customers = 0
   } = insights;
 
   return (
@@ -23,18 +29,36 @@ function CustomerInsights({ insights }) {
         <div className="customer-stat-card">
           <div className="customer-stat-icon">🆕</div>
           <div className="customer-stat-content">
-            <h3>New Customers</h3>
-            <p className="customer-stat-value">{new_customers}</p>
-            <p className="customer-stat-detail">First-time attendees</p>
+            <h3>First-Time Attendees</h3>
+            <p className="customer-stat-value">{first_time_customers}</p>
+            <p className="customer-stat-detail">Single event customers</p>
+          </div>
+        </div>
+        
+        <div className={`customer-stat-card ${first_timer_retention_rate >= 30 && first_timer_retention_rate <= 50 ? 'benchmark-met' : ''}`}>
+          <div className="customer-stat-icon">🔄</div>
+          <div className="customer-stat-content">
+            <h3>First-Timer Retention</h3>
+            <p className="customer-stat-value">{first_timer_retention_rate.toFixed(1)}%</p>
+            <p className="customer-stat-detail">Benchmark: 30-50%</p>
           </div>
         </div>
         
         <div className="customer-stat-card">
-          <div className="customer-stat-icon">🔄</div>
+          <div className="customer-stat-icon">🎫</div>
           <div className="customer-stat-content">
-            <h3>Returning Customers</h3>
-            <p className="customer-stat-value">{repeat_customers}</p>
-            <p className="customer-stat-detail">{repeat_customer_rate}% retention</p>
+            <h3>Multi-Show Buyers</h3>
+            <p className="customer-stat-value">{multi_show_buyers}</p>
+            <p className="customer-stat-detail">Attended 2+ events</p>
+          </div>
+        </div>
+        
+        <div className="customer-stat-card">
+          <div className="customer-stat-icon">⭐</div>
+          <div className="customer-stat-content">
+            <h3>Pseudo-Subscribers</h3>
+            <p className="customer-stat-value">{pseudo_subscribers}</p>
+            <p className="customer-stat-detail">{pseudo_subscriber_rate.toFixed(1)}% attend 3+ shows</p>
           </div>
         </div>
         
@@ -46,6 +70,47 @@ function CustomerInsights({ insights }) {
             <p className="customer-stat-detail">Average per customer</p>
           </div>
         </div>
+      </div>
+      
+      <div className="retention-insights-card">
+        <h3>Retention Analysis</h3>
+        <div className="retention-breakdown">
+          <div className="retention-item">
+            <div className="retention-label">One-Time Customers</div>
+            <div className="retention-bar">
+              <div 
+                className="retention-fill one-time" 
+                style={{width: `${(first_time_customers / unique_customers * 100).toFixed(0)}%`}}
+              />
+            </div>
+            <div className="retention-value">{first_time_customers} ({(first_time_customers / unique_customers * 100).toFixed(1)}%)</div>
+          </div>
+          
+          <div className="retention-item">
+            <div className="retention-label">2+ Events (Returners)</div>
+            <div className="retention-bar">
+              <div 
+                className="retention-fill returners" 
+                style={{width: `${(multi_show_buyers / unique_customers * 100).toFixed(0)}%`}}
+              />
+            </div>
+            <div className="retention-value">{multi_show_buyers} ({(multi_show_buyers / unique_customers * 100).toFixed(1)}%)</div>
+          </div>
+          
+          <div className="retention-item">
+            <div className="retention-label">3+ Events (Super Fans)</div>
+            <div className="retention-bar">
+              <div 
+                className="retention-fill super-fans" 
+                style={{width: `${(pseudo_subscribers / unique_customers * 100).toFixed(0)}%`}}
+              />
+            </div>
+            <div className="retention-value">{pseudo_subscribers} ({pseudo_subscriber_rate.toFixed(1)}%)</div>
+          </div>
+        </div>
+        <p className="retention-note">
+          💡 Industry insight: 5% increase in retention = 25-95% profit increase
+        </p>
       </div>
 
       {top_customers.length > 0 && (

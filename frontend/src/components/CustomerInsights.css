@@ -80,6 +80,89 @@
   margin-top: 5px;
 }
 
+.customer-stat-card.benchmark-met {
+  border-color: rgba(57, 255, 20, 0.6);
+  box-shadow: 0 4px 20px rgba(57, 255, 20, 0.3);
+}
+
+.customer-stat-card.benchmark-met:hover {
+  box-shadow: 0 8px 30px rgba(57, 255, 20, 0.5);
+}
+
+.retention-insights-card {
+  background: #0a0a0a;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.2);
+  border: 1px solid rgba(255, 20, 147, 0.3);
+}
+
+.retention-insights-card h3 {
+  color: #39ff14;
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+}
+
+.retention-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.retention-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.retention-label {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.retention-bar {
+  width: 100%;
+  height: 35px;
+  background: rgba(255, 20, 147, 0.1);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.retention-fill {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.retention-fill.one-time {
+  background: linear-gradient(90deg, #888 0%, #666 100%);
+}
+
+.retention-fill.returners {
+  background: linear-gradient(90deg, #ff1493 0%, #ff69b4 100%);
+}
+
+.retention-fill.super-fans {
+  background: linear-gradient(90deg, #39ff14 0%, #7fff00 100%);
+}
+
+.retention-value {
+  color: #39ff14;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.retention-note {
+  margin-top: 25px;
+  padding: 15px;
+  background: rgba(57, 255, 20, 0.05);
+  border-left: 3px solid #39ff14;
+  color: #39ff14;
+  font-size: 0.95rem;
+  border-radius: 4px;
+}
+
 .top-customers-card {
   background: #0a0a0a;
   border-radius: 16px;

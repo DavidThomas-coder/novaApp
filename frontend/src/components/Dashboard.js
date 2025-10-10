@@ -44,7 +44,10 @@ function Dashboard({ insights }) {
     monthly_trends,
     ticket_types,
     events_list = [],
-    events_monthly_data = {}
+    events_monthly_data = {},
+    capacity_utilization = 0,
+    pseudo_subscribers = 0,
+    pseudo_subscriber_rate = 0
   } = insights;
 
   const [selectedEvent, setSelectedEvent] = React.useState('all');
@@ -139,7 +142,25 @@ function Dashboard({ insights }) {
           <div className="stat-content">
             <h3>Repeat Customers</h3>
             <p className="stat-value">{repeat_customers}</p>
-            <p className="stat-detail">{repeat_customer_rate}% of total</p>
+            <p className="stat-detail">{repeat_customer_rate}% retention</p>
+          </div>
+        </div>
+        
+        <div className={`stat-card ${capacity_utilization >= 60 && capacity_utilization <= 75 ? 'benchmark-met' : ''}`}>
+          <div className="stat-icon">🎭</div>
+          <div className="stat-content">
+            <h3>Capacity Utilization</h3>
+            <p className="stat-value">{capacity_utilization.toFixed(1)}%</p>
+            <p className="stat-detail">Target: 60-75%</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">🎟️</div>
+          <div className="stat-content">
+            <h3>Multi-Show Buyers</h3>
+            <p className="stat-value">{pseudo_subscribers}</p>
+            <p className="stat-detail">{pseudo_subscriber_rate.toFixed(1)}% attend 3+ shows</p>
           </div>
         </div>
         
