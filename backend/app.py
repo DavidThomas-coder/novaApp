@@ -129,9 +129,13 @@ def get_events():
         
         events = all_events
         
-        # Format events
+        # Format events and filter out drafts
         formatted_events = []
         for event in events:
+            # Skip draft events
+            if event.get('status') == 'draft':
+                continue
+                
             formatted_events.append({
                 'id': event['id'],
                 'name': event['name']['text'],
@@ -240,6 +244,10 @@ def get_event_performance():
         event_performance = []
         
         for event in all_events:
+            # Skip draft events
+            if event.get('status') == 'draft':
+                continue
+                
             event_id = event['id']
             event_name = event['name']['text']
             capacity = event.get('capacity', 0)
@@ -363,6 +371,10 @@ def get_insights():
         attendees_by_month_by_event = defaultdict(lambda: defaultdict(int))  # event_name -> month -> attendee count
         
         for event in events:
+            # Skip draft events
+            if event.get('status') == 'draft':
+                continue
+                
             event_id = event['id']
             event_name = event['name']['text']
             
@@ -554,6 +566,10 @@ def get_weekly_sales():
         total_revenue = 0
         
         for event in all_events:
+            # Skip draft events
+            if event.get('status') == 'draft':
+                continue
+                
             event_id = event['id']
             event_name = event['name']['text']
             event_start = event['start']['local']
