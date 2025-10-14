@@ -196,7 +196,11 @@ function CustomerInsights({ insights }) {
               {displayedCustomers.map((customer) => (
                 <React.Fragment key={customer.email}>
                   <tr 
-                    onClick={() => setExpandedCustomer(expandedCustomer === customer.email ? null : customer.email)}
+                    onClick={() => {
+                      console.log('Clicked customer:', customer.email);
+                      console.log('Customer events:', customer.events);
+                      setExpandedCustomer(expandedCustomer === customer.email ? null : customer.email);
+                    }}
                     className="customer-row clickable"
                   >
                     <td className="email-cell">
@@ -215,7 +219,7 @@ function CustomerInsights({ insights }) {
                     <tr className="expanded-row">
                       <td colSpan="4">
                         <div className="event-details-list">
-                          <h4>Events Attended ({customer.events ? customer.events.length : 0}):</h4>
+                          <h4>Events Attended ({customer.events ? customer.events.length : 'no events data'}):</h4>
                           {customer.events && customer.events.length > 0 ? (
                             <div className="events-grid-small">
                               {customer.events.map((event, idx) => {
