@@ -55,13 +55,13 @@ Dashboard runs at http://localhost:3000
 
 ## Known Issues
 
-- Initial load takes 1-2 minutes (analyzing 160+ events)
+- Initial load takes 1-2 minutes (analyzing all prior events)
 - Performance tab requires manual load to avoid API rate limits
 - Clear browser cache if you don't see new features
 
 ## Future Plans
 
-- HubSpot CRM integration (when we get credentials)
+- HubSpot CRM integration
 - Cost tracking for net profit calculations
 - Automated weekly email reports
 
