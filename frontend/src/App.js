@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { cache } from './utils/cache';
 import './App.css';
-import Dashboard from './components/Dashboard';
+import Overview from './components/Overview';
 import EventList from './components/EventList';
 import EventDetails from './components/EventDetails';
 import CustomerInsights from './components/CustomerInsights';
 import EventPerformance from './components/EventPerformance';
-import Predictions from './components/Predictions';
-import WeeklySales from './components/WeeklySales';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
@@ -18,7 +16,7 @@ function App() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeView, setActiveView] = useState('dashboard');
+  const [activeView, setActiveView] = useState('overview');
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrgId, setSelectedOrgId] = useState(null);
 
@@ -189,10 +187,10 @@ function App() {
         </div>
         <nav className="nav-tabs">
           <button 
-            className={activeView === 'dashboard' ? 'active' : ''}
-            onClick={() => setActiveView('dashboard')}
+            className={activeView === 'overview' ? 'active' : ''}
+            onClick={() => setActiveView('overview')}
           >
-            Dashboard
+            Overview
           </button>
           <button 
             className={activeView === 'customers' ? 'active' : ''}
@@ -201,58 +199,39 @@ function App() {
             Customers
           </button>
           <button 
-            className={activeView === 'performance' ? 'active' : ''}
-            onClick={() => setActiveView('performance')}
-          >
-            Performance
-          </button>
-          <button 
-            className={activeView === 'predictions' ? 'active' : ''}
-            onClick={() => setActiveView('predictions')}
-          >
-            Insights
-          </button>
-          <button 
-            className={activeView === 'weekly-sales' ? 'active' : ''}
-            onClick={() => setActiveView('weekly-sales')}
-          >
-            Weekly Report
-          </button>
-          <button 
             className={activeView === 'events' ? 'active' : ''}
             onClick={() => setActiveView('events')}
           >
             Events
           </button>
+          <button 
+            className={activeView === 'performance' ? 'active' : ''}
+            onClick={() => setActiveView('performance')}
+          >
+            Performance
+          </button>
         </nav>
       </header>
 
       <main className="app-main">
-        {activeView === 'dashboard' && insights && (
-          <Dashboard insights={insights} orgId={selectedOrgId} />
+        {activeView === 'overview' && insights && (
+          <Overview insights={insights} events={events} orgId={selectedOrgId} />
         )}
         
         {activeView === 'customers' && insights && (
           <CustomerInsights insights={insights} />
         )}
         
-        {activeView === 'performance' && (
-          <EventPerformance orgId={selectedOrgId} />
-        )}
-        
-        {activeView === 'predictions' && insights && (
-          <Predictions insights={insights} events={events} orgId={selectedOrgId} />
-        )}
-        
-        {activeView === 'weekly-sales' && (
-          <WeeklySales orgId={selectedOrgId} />
-        )}
-        
         {activeView === 'events' && (
           <EventList 
             events={events} 
             onEventSelect={handleEventSelect}
+            orgId={selectedOrgId}
           />
+        )}
+        
+        {activeView === 'performance' && (
+          <EventPerformance orgId={selectedOrgId} />
         )}
         
         {activeView === 'event-details' && selectedEvent && (

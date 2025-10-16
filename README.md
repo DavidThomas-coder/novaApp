@@ -44,6 +44,14 @@ npm start
 
 Dashboard runs at http://localhost:3000
 
+## Dashboard Structure
+
+**4 Main Tabs:**
+1. **Overview** - Key metrics, charts, and predictions all in one place
+2. **Customers** - Retention analysis, top customers, event history per customer
+3. **Events** - Event browser with weekly report toggle
+4. **Performance** - Advanced analytics (opt-in to avoid API limits)
+
 ## Notes
 
 - Filters to only show Nova Comedy Collective events
@@ -51,6 +59,7 @@ Dashboard runs at http://localhost:3000
 - Future months shown with faded colors on charts
 - Performance tab loads on-demand to avoid API rate limits
 - Data cached for 5 minutes to speed up navigation
+- Weekly report accessible from Events tab
 
 
 ## Known Issues

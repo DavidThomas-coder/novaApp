@@ -70,14 +70,26 @@ function Predictions({ insights, events, orgId }) {
       
       <div className="prediction-cards-grid">
         <div className="prediction-card">
-          <h3>Attendance Trend</h3>
+          <h3>Overall Attendance Trend</h3>
           <div className="trend-indicator">
             <span className="trend-emoji">{getTrendEmoji(forecast.attendeeTrend)}</span>
             <span className="trend-label">{forecast.attendeeTrend}</span>
           </div>
           <p className="trend-detail">
             {forecast.avgGrowthRate > 0 ? '+' : ''}
-            {forecast.avgGrowthRate.toFixed(1)} attendees/month avg change
+            {forecast.avgGrowthRate.toFixed(1)} attendees/month (all-time avg)
+          </p>
+        </div>
+        
+        <div className="prediction-card">
+          <h3>Recent Trend (Last 6 Months)</h3>
+          <div className="trend-indicator">
+            <span className="trend-emoji">{getTrendEmoji(forecast.recentTrend)}</span>
+            <span className="trend-label">{forecast.recentTrend}</span>
+          </div>
+          <p className="trend-detail">
+            {forecast.recentGrowthRate > 0 ? '+' : ''}
+            {forecast.recentGrowthRate.toFixed(1)} attendees/month (recent)
           </p>
         </div>
         

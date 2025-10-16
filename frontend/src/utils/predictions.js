@@ -41,11 +41,21 @@ export const predictNextMonths = (monthlyTrends, monthsAhead = 3) => {
   const attendeeRegression = linearRegression(attendeeData);
   const revenueRegression = linearRegression(revenueData);
 
-  // Determine trend direction
-  const attendeeTrend = attendeeRegression.slope > 5 ? 'growing' : 
-                        attendeeRegression.slope < -5 ? 'declining' : 'stable';
-  const revenueTrend = revenueRegression.slope > 50 ? 'growing' : 
-                       revenueRegression.slope < -50 ? 'declining' : 'stable';
+  // Determine trend direction (more sensitive thresholds)
+  const attendeeTrend = attendeeRegression.slope > 2 ? 'growing' : 
+                        attendeeRegression.slope < -2 ? 'declining' : 'stable';
+  const revenueTrend = revenueRegression.slope > 20 ? 'growing' : 
+                       revenueRegression.slope < -20 ? 'declining' : 'stable';
+  
+  // Also calculate recent trend (last 6 months only for more current picture)
+  const recentData = monthlyTrends.slice(-6);
+  const recentAttendeeData = recentData.map((item, index) => ({
+    value: item.attendees || 0
+  }));
+  
+  const recentRegression = linearRegression(recentAttendeeData);
+  const recentTrend = recentRegression.slope > 2 ? 'growing' : 
+                      recentRegression.slope < -2 ? 'declining' : 'stable';
 
   // Generate predictions for next months
   const predictions = [];
@@ -86,7 +96,9 @@ export const predictNextMonths = (monthlyTrends, monthsAhead = 3) => {
     predictions,
     attendeeTrend,
     revenueTrend,
-    avgGrowthRate: attendeeRegression.slope
+    recentTrend,
+    avgGrowthRate: attendeeRegression.slope,
+    recentGrowthRate: recentRegression.slope
   };
 };
 

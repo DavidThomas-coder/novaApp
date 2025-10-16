@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { exportEventsToCSV } from '../utils/csvExport';
+import WeeklySales from './WeeklySales';
 import './EventList.css';
 
-function EventList({ events, onEventSelect }) {
+function EventList({ events, onEventSelect, orgId }) {
+  const [viewMode, setViewMode] = useState('all'); // 'all' or 'weekly'
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date-desc');
@@ -65,13 +67,54 @@ function EventList({ events, onEventSelect }) {
     );
   };
 
+  // If weekly view, show WeeklySales component
+  if (viewMode === 'weekly') {
+    return (
+      <div className="event-list">
+        <div className="view-selector">
+          <button 
+            className={viewMode === 'all' ? 'active' : ''}
+            onClick={() => setViewMode('all')}
+          >
+            📅 All Events
+          </button>
+          <button 
+            className={viewMode === 'weekly' ? 'active' : ''}
+            onClick={() => setViewMode('weekly')}
+          >
+            📊 Weekly Report
+          </button>
+        </div>
+        <WeeklySales orgId={orgId} />
+      </div>
+    );
+  }
+
   return (
     <div className="event-list">
-      <h2 className="section-title">All Events ({filteredEvents.length})</h2>
-      <p className="tab-description">
-        Browse and search all your Eventbrite events. Filter by status, sort by date or name, 
-        and click any event to view detailed attendee information.
-      </p>
+      <div className="events-header-section">
+        <div>
+          <h2 className="section-title">All Events ({filteredEvents.length})</h2>
+          <p className="tab-description">
+            Browse and search all your Eventbrite events. Filter by status, sort by date or name, 
+            and click any event to view detailed attendee information.
+          </p>
+        </div>
+        <div className="view-selector">
+          <button 
+            className={viewMode === 'all' ? 'active' : ''}
+            onClick={() => setViewMode('all')}
+          >
+            📅 All Events
+          </button>
+          <button 
+            className={viewMode === 'weekly' ? 'active' : ''}
+            onClick={() => setViewMode('weekly')}
+          >
+            📊 Weekly Report
+          </button>
+        </div>
+      </div>
       
       <div className="event-filters">
         <input
